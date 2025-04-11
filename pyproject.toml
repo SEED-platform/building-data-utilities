@@ -23,6 +23,7 @@ setuptools = "^78.1.0"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
+pytest = "^8.3.5"
 
 [build-system]
 # Need to provide the build system information for the package to be built
