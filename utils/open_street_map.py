@@ -9,11 +9,10 @@ OVERPASS_URL = "http://overpass-api.de/api/interpreter"
 
 
 def reverse_geocode(lat, lon):
-    """should only call at 1 per second per user agreement, no threaded calls either. This
-    is per the license agreement"""
+    """should only call at 1 per second per user agreement, no threaded calls either. This is per the license agreement"""
     geolocator = Nominatim(user_agent="CBL")
     location = geolocator.reverse((lat, lon), language="en", exactly_one=True)
-    # print(location)
+
     return location.raw
 
 

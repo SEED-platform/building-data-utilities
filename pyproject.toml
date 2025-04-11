@@ -20,6 +20,8 @@ python-dotenv = "^1.0.1"
 requests = "^2.32.3"
 shapely = "^2.0.6"
 setuptools = "^78.1.0"
+nominatim = "^0.1"
+geopy = "^2.4.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
