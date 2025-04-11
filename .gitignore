@@ -6,6 +6,7 @@ __pycache__
 .vscode
 
 dist
+node_modules
 
 /data/
 /locations.json
