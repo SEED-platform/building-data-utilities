@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 """
 SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
-See also https://github.com/SEED-platform/seed/blob/main/LICENSE.md
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 import requests
@@ -79,13 +79,13 @@ def geocode_addresses(locations: list[Location], mapquest_api_key: str):
             # Catch invalid API key error before parsing the response
             if response.status_code == 401:
                 raise MapQuestAPIKeyError(
-                    "Failed geocoding property states due to MapQuest error. " "API Key is invalid with message: {response.content}."
+                    "Failed geocoding property states due to MapQuest error. API Key is invalid with message: {response.content}."
                 )
             results += response.json().get("results")
         except Exception as e:
             if response.status_code == 403:
                 raise MapQuestAPIKeyError(
-                    "Failed geocoding property states due to MapQuest error. " "Your MapQuest API Key is either invalid or at its limit."
+                    "Failed geocoding property states due to MapQuest error. Your MapQuest API Key is either invalid or at its limit."
                 )
             else:
                 raise e

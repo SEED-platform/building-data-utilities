@@ -11,23 +11,23 @@ packages = [{include = "utils"}]
 [tool.poetry.dependencies]
 python = ">=3.9, <3.13"
 
-pnnl-buildingid = {git = "https://github.com/SEED-platform/buildingid.git", rev = "master"}
-usaddress = "0.5.11"
+pnnl-buildingid = {git = "https://github.com/seed-platform/buildingid.git", rev = "master"}
+usaddress = "0.5.13"
 street-address = "0.4.0"
 geopandas = "^1.0.1"
 mercantile = "^1.2.1"
 python-dotenv = "^1.0.1"
 requests = "^2.32.3"
 shapely = "^2.0.6"
-setuptools = "^75.8.0"
+setuptools = "^78.1.0"
+nominatim = "^0.1"
+geopy = "^2.4.1"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
+pytest = "^8.3.5"
 
 [build-system]
 # Need to provide the build system information for the package to be built
 requires = ["poetry-core", "setuptools", "wheel"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101"] # assert statements are allowed in tests, and paths are safe
