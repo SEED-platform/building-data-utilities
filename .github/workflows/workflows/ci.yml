@@ -27,4 +27,3 @@ jobs:
         run: poetry run pre-commit run --all-files
       - name: Run Python Tests
         run: poetry run pytest
-  
