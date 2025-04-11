@@ -17,11 +17,15 @@ Given a list of addresses, this workflow will automatically:
 2. Dependencies are managed through Poetry, install with `pip install poetry`
 3. Install dependencies with `poetry install`
 4. Create a `.env` file in the root with your MapQuest API key in the format:
+
    ```dotenv
    MAPQUEST_API_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
    ```
+
    Note that if an env key for MAPQUEST_API_KEY exists in your profile, then it use that over the .env file.
+
 5. Create a `locations.json` file in the root containing a list of addresses to process in the format:
+
    ```json
    [
      {
