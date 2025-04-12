@@ -6,7 +6,6 @@ See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 
 from buildingid.code import decode, encode
 from geopandas import GeoDataFrame
-from openlocationcode.openlocationcode import PAIR_CODE_LENGTH_
 from shapely.geometry import Point, Polygon
 
 
