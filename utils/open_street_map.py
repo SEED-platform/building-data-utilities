@@ -9,7 +9,8 @@ OVERPASS_URL = "http://overpass-api.de/api/interpreter"
 
 
 def reverse_geocode(lat, lon):
-    """should only call at 1 per second per user agreement, no threaded calls either. This is per the license agreement"""
+    """should only call at 1 per second per user agreement, no threaded calls either. This
+    is per the license agreement"""
     geolocator = Nominatim(user_agent="CBL")
     location = geolocator.reverse((lat, lon), language="en", exactly_one=True)
 
@@ -244,7 +245,7 @@ def process_dataframe_for_osm_buildings(
 
     Args:
         geodataframe (GeoDataFrame): Dataframe to process and add results to.
-        method (str, optional): Which field contains the geo data. Defaults to 'geometry_centoid'.
+        method (str, optional): Which field contains the geo data. Defaults to 'geometry_centroid'.
         copy_source_columns (bool, optional): Copy the source columns to the result. Defaults to False.
 
     Returns:

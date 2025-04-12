@@ -10,7 +10,11 @@ from openlocationcode.openlocationcode import PAIR_CODE_LENGTH_
 from shapely.geometry import Point, Polygon
 
 
-def encode_ubid(geometry: Polygon, code_length: int = PAIR_CODE_LENGTH_) -> str:
+def encode_ubid(geometry: Polygon, code_length: int = 11) -> str:
+    """
+    Default code_length from openlocationcode.PAIR_CODE_LENGTH_ is 10, but we want additional
+    precision, so we set the default here to 11.
+    """
     min_longitude, min_latitude, max_longitude, max_latitude = geometry.bounds
     centroid = geometry.centroid
     ubid = encode(min_latitude, min_longitude, max_latitude, max_longitude, centroid.y, centroid.x, codeLength=code_length)

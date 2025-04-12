@@ -16,5 +16,4 @@ from utils.ubid import add_ubid_to_geodataframe
 def shp_to_geojson(shapefile: str | Path):
     file_name, _ext = os.path.splitext(shapefile)
     gdf = gpd.read_file(shapefile).to_crs(CRS.from_epsg(4326))
-
-    return add_ubid_to_geodataframe(gdf, additional_ubid_columns_to_create=[]).to_file(f"{file_name}.geojson", driver="GeoJSON")
+    (add_ubid_to_geodataframe(gdf, additional_ubid_columns_to_create=[]).to_file(f"{file_name}.geojson", driver="GeoJSON"))

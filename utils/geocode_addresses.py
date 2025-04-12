@@ -73,13 +73,14 @@ def geocode_addresses(locations: list[Location], mapquest_api_key: str):
                     "thumbMaps": False,
                 },
             },
+            verify=True,
         )
 
         try:
             # Catch invalid API key error before parsing the response
             if response.status_code == 401:
                 raise MapQuestAPIKeyError(
-                    "Failed geocoding property states due to MapQuest error. API Key is invalid with message: {response.content}."
+                    f"Failed geocoding property states due to MapQuest error. API Key is invalid with message: {response.content}."
                 )
             results += response.json().get("results")
         except Exception as e:
