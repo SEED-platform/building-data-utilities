@@ -1,6 +1,7 @@
 __pycache__
 .env
 .idea
+.pytest_cache
 .python-version
 .ruff_cache
 .vscode

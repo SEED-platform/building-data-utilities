@@ -1,6 +1,6 @@
 # class for holding tests with setup and teardown
 
-from utils.chunk import chunk
+from cbl_workflow.utils.chunk import chunk
 
 
 class TestChunk:
