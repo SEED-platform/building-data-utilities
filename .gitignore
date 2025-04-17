@@ -6,6 +6,7 @@ __pycache__
 .ruff_cache
 .vscode
 .DS_Store
+myenv
 
 dist
 node_modules
