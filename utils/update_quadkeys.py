@@ -25,7 +25,8 @@ def update_quadkeys(quadkeys: list[int], save_directory: Path = Path("data/quadk
         if rows.shape[0] == 1:
             url = rows.iloc[0]["Url"]
         elif rows.shape[0] > 1:
-            raise ValueError(f"Multiple rows found for QuadKey: {quadkey}")
+            url = rows.iloc[-1]["Url"]
+            # raise ValueError(f"Multiple rows found for QuadKey: {quadkey}")
         else:
             raise ValueError(f"QuadKey not found in dataset: {quadkey}")
 

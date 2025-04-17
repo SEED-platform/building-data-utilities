@@ -4,6 +4,7 @@ __pycache__
 .python-version
 .ruff_cache
 .vscode
+.DS_Store
 
 dist
 node_modules
