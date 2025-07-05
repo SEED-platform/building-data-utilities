@@ -1,0 +1,43 @@
+version: 2
+updates:
+  - package-ecosystem: 'pip'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    groups:
+      dev-deps:
+        dependency-type: 'development'
+      prod-deps:
+        dependency-type: 'production'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'deps'
+    labels:
+      - 'Maintenance'
+  - package-ecosystem: 'npm'
+    directory: '/angular-app'
+    schedule:
+      interval: 'daily'
+    groups:
+      npm-dev-deps:
+        dependency-type: 'development'
+      npm-prod-deps:
+        dependency-type: 'production'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'deps'
+    labels:
+      - 'Maintenance'
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+    groups:
+      actions-deps:
+        patterns:
+          - '*'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'ci'
+    labels:
+      - 'Do not publish'
