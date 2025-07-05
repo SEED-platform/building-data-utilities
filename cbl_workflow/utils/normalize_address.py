@@ -6,8 +6,8 @@ See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 
 import re
 
-import usaddress
-from streetaddress.streetaddress import StreetAddressFormatter
+import usaddress  # type: ignore[import]
+from streetaddress.streetaddress import StreetAddressFormatter  # type: ignore[import]
 
 
 def _normalize_subaddress_type(subaddress_type):
