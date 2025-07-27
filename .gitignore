@@ -6,6 +6,8 @@ __pycache__
 .ruff_cache
 .vscode
 .DS_Store
+coverage.xml
+.coverage
 myenv
 
 dist
