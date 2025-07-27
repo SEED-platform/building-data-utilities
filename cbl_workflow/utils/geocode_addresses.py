@@ -46,14 +46,16 @@ def _process_result(result):
                 continue
             admin_areas[result.get("locations")[0].get(f"adminArea{i}Type").lower()] = result.get("locations")[0].get(f"adminArea{i}")
 
-        return {
+        d = {
             "quality": quality,
             "address": result.get("locations")[0].get("street"),
             "longitude": long,
             "latitude": lat,
             "postal_code": result.get("locations")[0].get("postalCode"),
             "side_of_street": result.get("locations")[0].get("sideOfStreet"),
-        } | admin_areas
+        }
+        d.update(admin_areas)
+        return d
     else:
         return {"quality": quality}
 
