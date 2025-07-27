@@ -4,12 +4,14 @@ Tests for shapefile to GeoJSON conversion utility
 Simple integration-style tests using temporary files
 """
 
-import os
 import json
-import tempfile
+import os
 import shutil
+import tempfile
+
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
+
 from cbl_workflow.utils.shp_to_geojson import shp_to_geojson
 
 
@@ -32,11 +34,7 @@ class TestShpToGeoJSON:
         data = {
             "id": [1, 2, 3],
             "name": ["Point A", "Point B", "Point C"],
-            "geometry": [
-                Point(-104.9903, 39.7392),
-                Point(-105.1019, 39.7200),
-                Point(-105.0000, 39.7500)
-            ]
+            "geometry": [Point(-104.9903, 39.7392), Point(-105.1019, 39.7200), Point(-105.0000, 39.7500)],
         }
         gdf = gpd.GeoDataFrame(data, crs="EPSG:4326")
         gdf.to_file(self.test_shp)
@@ -48,11 +46,7 @@ class TestShpToGeoJSON:
         poly1 = Polygon([(-105, 39), (-104, 39), (-104, 40), (-105, 40)])
         poly2 = Polygon([(-106, 40), (-105, 40), (-105, 41), (-106, 41)])
 
-        data = {
-            "id": [1, 2],
-            "building_type": ["residential", "commercial"],
-            "geometry": [poly1, poly2]
-        }
+        data = {"id": [1, 2], "building_type": ["residential", "commercial"], "geometry": [poly1, poly2]}
         gdf = gpd.GeoDataFrame(data, crs="EPSG:4326")
         gdf.to_file(self.test_shp)
         return gdf
@@ -69,7 +63,7 @@ class TestShpToGeoJSON:
         assert os.path.exists(self.expected_geojson)
 
         # Verify the GeoJSON content
-        with open(self.expected_geojson, 'r') as f:
+        with open(self.expected_geojson) as f:
             geojson_data = json.load(f)
 
         # Basic structure checks
@@ -84,8 +78,7 @@ class TestShpToGeoJSON:
         assert "properties" in first_feature
 
         # Verify properties are preserved
-        feature_names = [f["properties"]["name"]
-                         for f in geojson_data["features"]]
+        feature_names = [f["properties"]["name"] for f in geojson_data["features"]]
         assert "Point A" in feature_names
         assert "Point B" in feature_names
         assert "Point C" in feature_names
@@ -102,7 +95,7 @@ class TestShpToGeoJSON:
         assert os.path.exists(self.expected_geojson)
 
         # Verify the GeoJSON content
-        with open(self.expected_geojson, 'r') as f:
+        with open(self.expected_geojson) as f:
             geojson_data = json.load(f)
 
         # Basic structure checks
@@ -119,7 +112,7 @@ class TestShpToGeoJSON:
         assert len(geojson_data["features"]) == 2
         feature_properties = geojson_data["features"][0]["properties"]
         assert "id" in feature_properties  # ID should be preserved
-        
+
         # The building_type might be renamed or modified during processing
         # Just verify we have some properties
         assert len(feature_properties) > 0
@@ -150,7 +143,7 @@ class TestShpToGeoJSON:
         data = {
             "id": [1],
             "name": ["Test Point"],
-            "geometry": [Point(500000, 4400000)]  # UTM coordinates
+            "geometry": [Point(500000, 4400000)],  # UTM coordinates
         }
         gdf = gpd.GeoDataFrame(data, crs="EPSG:32613")  # UTM Zone 13N
         gdf.to_file(self.test_shp)
@@ -166,7 +159,7 @@ class TestShpToGeoJSON:
         bounds = result_gdf.total_bounds
         # Should be somewhere in North America
         assert -180 <= bounds[0] <= 180  # longitude
-        assert -90 <= bounds[1] <= 90    # latitude
+        assert -90 <= bounds[1] <= 90  # latitude
 
     def test_file_path_as_string(self):
         """Test function works with string file paths"""
@@ -187,13 +180,9 @@ class TestShpToGeoJSON:
         assert os.path.exists(self.expected_geojson)
 
     def test_nonexistent_file_raises_error(self):
-        """Test that function raises appropriate error for missing file"""
-        nonexistent_file = os.path.join(self.temp_dir, "does_not_exist.shp")
+        """Test che la funzione sollevi errore per file mancante"""
+        import pytest
 
-        try:
+        nonexistent_file = os.path.join(self.temp_dir, "does_not_exist.shp")
+        with pytest.raises(Exception, match="does_not_exist.shp"):
             shp_to_geojson(nonexistent_file)
-            # If we get here, the function didn't raise an error
-            assert False, "Expected an error for nonexistent file"
-        except Exception:
-            # This is expected - the function should raise an error
-            pass

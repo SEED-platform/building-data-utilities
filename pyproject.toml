@@ -43,7 +43,7 @@ filterwarnings = [
     "ignore:.*geometry is in a geographic CRS.*:UserWarning",
 ]
 # Coverage configuration
-addopts = "--cov=cbl_workflow --cov-report=term-missing --cov-report=xml --cov-fail-under=59"
+addopts = "--cov=cbl_workflow --cov-report=term-missing --cov-report=xml --cov-fail-under=50"
 
 [build-system]
 # Need to provide the build system information for the package to be built

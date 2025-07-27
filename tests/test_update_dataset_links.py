@@ -4,14 +4,12 @@ Tests for dataset links update utilities
 Simple tests for downloading and updating dataset links
 """
 
-import tempfile
 import shutil
+import tempfile
 from pathlib import Path
-from unittest.mock import Mock, patch, mock_open
-from cbl_workflow.utils.update_dataset_links import (
-    update_dataset_links,
-    DATASET_URL
-)
+from unittest.mock import Mock, mock_open, patch
+
+from cbl_workflow.utils.update_dataset_links import DATASET_URL, update_dataset_links
 
 
 class TestUpdateDatasetLinks:
@@ -34,10 +32,9 @@ class TestUpdateDatasetLinks:
         assert DATASET_URL.startswith("https://")
         assert "dataset-links.csv" in DATASET_URL
 
-    @patch('cbl_workflow.utils.update_dataset_links.requests')
-    @patch('builtins.open', new_callable=mock_open)
-    def test_update_dataset_links_fresh_download(self, mock_file,
-                                                 mock_requests):
+    @patch("cbl_workflow.utils.update_dataset_links.requests")
+    @patch("builtins.open", new_callable=mock_open)
+    def test_update_dataset_links_fresh_download(self, mock_file, mock_requests):
         """Test downloading dataset links when file doesn't exist"""
         # Mock HTTP responses
         mock_get_response = Mock()
@@ -45,7 +42,7 @@ class TestUpdateDatasetLinks:
         mock_requests.get.return_value = mock_get_response
 
         # Mock file doesn't exist
-        with patch('pathlib.Path.exists', return_value=False):
+        with patch("pathlib.Path.exists", return_value=False):
             update_dataset_links(save_directory=self.save_dir)
 
         # Verify download was attempted
@@ -54,36 +51,32 @@ class TestUpdateDatasetLinks:
         # Verify file was written
         mock_file.assert_called()
 
-    @patch('cbl_workflow.utils.update_dataset_links.requests')
-    @patch('builtins.open', new_callable=mock_open, read_data=b"old data")
-    def test_update_dataset_links_skip_same_md5(self, mock_file,
-                                                mock_requests):
+    @patch("cbl_workflow.utils.update_dataset_links.requests")
+    @patch("builtins.open", new_callable=mock_open, read_data=b"old data")
+    def test_update_dataset_links_skip_same_md5(self, mock_file, mock_requests):
         """Test skipping download when MD5 hashes match"""
         import base64
         import hashlib
 
         # Calculate MD5 of mock data
         test_data = b"old data"
-        expected_md5 = base64.b64encode(
-            hashlib.md5(test_data).digest()
-        ).decode("UTF-8")
+        expected_md5 = base64.b64encode(hashlib.md5(test_data).digest()).decode("UTF-8")
 
         # Mock file exists with same MD5
         mock_head_response = Mock()
         mock_head_response.headers = {"Content-MD5": expected_md5}
         mock_requests.head.return_value = mock_head_response
 
-        with patch('pathlib.Path.exists', return_value=True):
+        with patch("pathlib.Path.exists", return_value=True):
             update_dataset_links(save_directory=self.save_dir)
 
         # Should check HEAD but not download
         mock_requests.head.assert_called_once_with(DATASET_URL)
         mock_requests.get.assert_not_called()
 
-    @patch('cbl_workflow.utils.update_dataset_links.requests')
-    @patch('builtins.open', new_callable=mock_open, read_data=b"old data")
-    def test_update_dataset_links_redownload_different_md5(self, mock_file,
-                                                           mock_requests):
+    @patch("cbl_workflow.utils.update_dataset_links.requests")
+    @patch("builtins.open", new_callable=mock_open, read_data=b"old data")
+    def test_update_dataset_links_redownload_different_md5(self, mock_file, mock_requests):
         """Test re-downloading when MD5 hashes differ"""
         # Mock file exists with different MD5
         mock_head_response = Mock()
@@ -94,7 +87,7 @@ class TestUpdateDatasetLinks:
         mock_get_response.content = b"new data"
         mock_requests.get.return_value = mock_get_response
 
-        with patch('pathlib.Path.exists', return_value=True):
+        with patch("pathlib.Path.exists", return_value=True):
             update_dataset_links(save_directory=self.save_dir)
 
         # Should both check and download
@@ -106,14 +99,12 @@ class TestUpdateDatasetLinks:
         non_existent_dir = self.temp_dir / "new_dir" / "quadkeys"
         assert not non_existent_dir.exists()
 
-        with patch('cbl_workflow.utils.update_dataset_links.requests') \
-                as mock_requests:
+        with patch("cbl_workflow.utils.update_dataset_links.requests") as mock_requests:
             mock_get_response = Mock()
             mock_get_response.content = b"test data"
             mock_requests.get.return_value = mock_get_response
 
-            with patch('pathlib.Path.exists', return_value=False), \
-                 patch('builtins.open', mock_open()):
+            with patch("pathlib.Path.exists", return_value=False), patch("builtins.open", mock_open()):
                 update_dataset_links(save_directory=non_existent_dir)
 
         # Directory should now exist
@@ -122,21 +113,22 @@ class TestUpdateDatasetLinks:
 
     def test_update_dataset_links_default_directory(self):
         """Test using default save directory"""
-        with patch('cbl_workflow.utils.update_dataset_links.requests') \
-                as mock_requests:
+        with patch("cbl_workflow.utils.update_dataset_links.requests") as mock_requests:
             mock_get_response = Mock()
             mock_get_response.content = b"test data"
             mock_requests.get.return_value = mock_get_response
 
-            with patch('pathlib.Path.exists', return_value=False), \
-                 patch('pathlib.Path.mkdir') as mock_mkdir, \
-                 patch('builtins.open', mock_open()):
+            with (
+                patch("pathlib.Path.exists", return_value=False),
+                patch("pathlib.Path.mkdir") as mock_mkdir,
+                patch("builtins.open", mock_open()),
+            ):
                 update_dataset_links()  # No save_directory parameter
 
             # Should create default directory
             mock_mkdir.assert_called()
 
-    @patch('cbl_workflow.utils.update_dataset_links.requests')
+    @patch("cbl_workflow.utils.update_dataset_links.requests")
     def test_update_dataset_links_file_operations(self, mock_requests):
         """Test the actual file operations in detail"""
         mock_get_response = Mock()
@@ -155,7 +147,7 @@ class TestUpdateDatasetLinks:
         assert expected_file.exists()
         assert expected_file.read_bytes() == test_content
 
-    @patch('cbl_workflow.utils.update_dataset_links.requests')
+    @patch("cbl_workflow.utils.update_dataset_links.requests")
     def test_update_dataset_links_md5_calculation(self, mock_requests):
         """Test MD5 calculation and comparison logic"""
         import base64
@@ -168,9 +160,7 @@ class TestUpdateDatasetLinks:
         test_file.write_bytes(test_content)
 
         # Calculate expected MD5
-        expected_md5 = base64.b64encode(
-            hashlib.md5(test_content).digest()
-        ).decode("UTF-8")
+        expected_md5 = base64.b64encode(hashlib.md5(test_content).digest()).decode("UTF-8")
 
         # Mock server returns same MD5
         mock_head_response = Mock()
@@ -184,15 +174,12 @@ class TestUpdateDatasetLinks:
 
     def test_update_dataset_links_pathlib_integration(self):
         """Test that function works correctly with pathlib.Path objects"""
-        with patch('cbl_workflow.utils.update_dataset_links.requests') \
-                as mock_requests:
+        with patch("cbl_workflow.utils.update_dataset_links.requests") as mock_requests:
             mock_get_response = Mock()
             mock_get_response.content = b"test"
             mock_requests.get.return_value = mock_get_response
 
-            with patch('pathlib.Path.exists', return_value=False), \
-                 patch('builtins.open', mock_open()):
-                
+            with patch("pathlib.Path.exists", return_value=False), patch("builtins.open", mock_open()):
                 # Test with Path object
                 path_obj = Path("test/path")
                 update_dataset_links(save_directory=path_obj)
@@ -200,30 +187,16 @@ class TestUpdateDatasetLinks:
                 # Should work without errors
                 mock_requests.get.assert_called_once()
 
-    @patch('cbl_workflow.utils.update_dataset_links.requests')
-    def test_update_dataset_links_error_handling(self, mock_requests):
+    @patch("cbl_workflow.utils.update_dataset_links.requests")
+    @patch("builtins.open", new_callable=mock_open)
+    def test_update_dataset_links_error_handling(self, mock_file, mock_requests):
         """Test basic error handling scenarios"""
         # Test when requests raise an exception
         mock_requests.get.side_effect = Exception("Network error")
 
-        try:
-            with patch('pathlib.Path.exists', return_value=False):
-                update_dataset_links(save_directory=self.save_dir)
-            # If no exception is raised, the function might handle errors
-        except Exception as e:
-            # If exception propagates, that's also valid behavior
-            assert "Network error" in str(e)
+        import pytest
 
-    @patch('cbl_workflow.utils.update_dataset_links.requests')
-    @patch('builtins.open', new_callable=mock_open)
-    def test_update_dataset_links_binary_write_mode(self, mock_file,
-                                                    mock_requests):
-        """Test that file is opened in binary write mode"""
-        mock_get_response = Mock()
-        mock_get_response.content = b"csv content"
-        mock_requests.get.return_value = mock_get_response
-
-        with patch('pathlib.Path.exists', return_value=False):
+        with patch("pathlib.Path.exists", return_value=False), pytest.raises(Exception, match="Network error"):
             update_dataset_links(save_directory=self.save_dir)
 
         # Verify file was opened in binary write mode

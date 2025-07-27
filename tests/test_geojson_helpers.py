@@ -19,19 +19,11 @@ class TestGeoJSONHelpers:
                     "type": "Feature",
                     "geometry": {
                         "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [-105.0, 39.0],
-                                [-104.0, 39.0],
-                                [-104.0, 40.0],
-                                [-105.0, 40.0],
-                                [-105.0, 39.0]
-                            ]
-                        ]
+                        "coordinates": [[[-105.0, 39.0], [-104.0, 39.0], [-104.0, 40.0], [-105.0, 40.0], [-105.0, 39.0]]],
                     },
-                    "properties": {"name": "Test Polygon"}
+                    "properties": {"name": "Test Polygon"},
                 }
-            ]
+            ],
         }
 
         coordinates = extract_coordinates(geojson_data)
@@ -56,33 +48,17 @@ class TestGeoJSONHelpers:
                     "type": "Feature",
                     "geometry": {
                         "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [-105.0, 39.0],
-                                [-104.0, 39.0],
-                                [-104.0, 40.0],
-                                [-105.0, 40.0],
-                                [-105.0, 39.0]
-                            ]
-                        ]
-                    }
+                        "coordinates": [[[-105.0, 39.0], [-104.0, 39.0], [-104.0, 40.0], [-105.0, 40.0], [-105.0, 39.0]]],
+                    },
                 },
                 {
                     "type": "Feature",
                     "geometry": {
                         "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [-103.0, 39.0],
-                                [-102.0, 39.0],
-                                [-102.0, 40.0],
-                                [-103.0, 40.0],
-                                [-103.0, 39.0]
-                            ]
-                        ]
-                    }
-                }
-            ]
+                        "coordinates": [[[-103.0, 39.0], [-102.0, 39.0], [-102.0, 40.0], [-103.0, 40.0], [-103.0, 39.0]]],
+                    },
+                },
+            ],
         }
 
         coordinates = extract_coordinates(geojson_data)
@@ -107,25 +83,13 @@ class TestGeoJSONHelpers:
                         "type": "Polygon",
                         "coordinates": [
                             # Outer ring
-                            [
-                                [-105.0, 39.0],
-                                [-104.0, 39.0],
-                                [-104.0, 40.0],
-                                [-105.0, 40.0],
-                                [-105.0, 39.0]
-                            ],
+                            [[-105.0, 39.0], [-104.0, 39.0], [-104.0, 40.0], [-105.0, 40.0], [-105.0, 39.0]],
                             # Inner ring (hole)
-                            [
-                                [-104.8, 39.2],
-                                [-104.2, 39.2],
-                                [-104.2, 39.8],
-                                [-104.8, 39.8],
-                                [-104.8, 39.2]
-                            ]
-                        ]
-                    }
+                            [[-104.8, 39.2], [-104.2, 39.2], [-104.2, 39.8], [-104.8, 39.8], [-104.8, 39.2]],
+                        ],
+                    },
                 }
-            ]
+            ],
         }
 
         coordinates = extract_coordinates(geojson_data)
@@ -140,39 +104,16 @@ class TestGeoJSONHelpers:
         geojson_data = {
             "type": "FeatureCollection",
             "features": [
-                {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [-104.5, 39.5]
-                    }
-                },
+                {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-104.5, 39.5]}},
                 {
                     "type": "Feature",
                     "geometry": {
                         "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [-105.0, 39.0],
-                                [-104.0, 39.0],
-                                [-104.0, 40.0],
-                                [-105.0, 40.0],
-                                [-105.0, 39.0]
-                            ]
-                        ]
-                    }
+                        "coordinates": [[[-105.0, 39.0], [-104.0, 39.0], [-104.0, 40.0], [-105.0, 40.0], [-105.0, 39.0]]],
+                    },
                 },
-                {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "LineString",
-                        "coordinates": [
-                            [-104.0, 39.0],
-                            [-103.0, 40.0]
-                        ]
-                    }
-                }
-            ]
+                {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-104.0, 39.0], [-103.0, 40.0]]}},
+            ],
         }
 
         coordinates = extract_coordinates(geojson_data)
@@ -183,10 +124,7 @@ class TestGeoJSONHelpers:
 
     def test_extract_coordinates_empty_features(self):
         """Test extracting coordinates from empty feature collection"""
-        geojson_data = {
-            "type": "FeatureCollection",
-            "features": []
-        }
+        geojson_data = {"type": "FeatureCollection", "features": []}
 
         coordinates = extract_coordinates(geojson_data)
         assert coordinates == []
@@ -196,24 +134,9 @@ class TestGeoJSONHelpers:
         geojson_data = {
             "type": "FeatureCollection",
             "features": [
-                {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [-104.5, 39.5]
-                    }
-                },
-                {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "LineString",
-                        "coordinates": [
-                            [-104.0, 39.0],
-                            [-103.0, 40.0]
-                        ]
-                    }
-                }
-            ]
+                {"type": "Feature", "geometry": {"type": "Point", "coordinates": [-104.5, 39.5]}},
+                {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[-104.0, 39.0], [-103.0, 40.0]]}},
+            ],
         }
 
         coordinates = extract_coordinates(geojson_data)
@@ -228,18 +151,10 @@ class TestGeoJSONHelpers:
                     "type": "Feature",
                     "geometry": {
                         "type": "MultiPolygon",
-                        "coordinates": [
-                            [[
-                                [-105.0, 39.0],
-                                [-104.0, 39.0],
-                                [-104.0, 40.0],
-                                [-105.0, 40.0],
-                                [-105.0, 39.0]
-                            ]]
-                        ]
-                    }
+                        "coordinates": [[[[-105.0, 39.0], [-104.0, 39.0], [-104.0, 40.0], [-105.0, 40.0], [-105.0, 39.0]]]],
+                    },
                 }
-            ]
+            ],
         }
 
         coordinates = extract_coordinates(geojson_data)
@@ -250,32 +165,19 @@ class TestGeoJSONHelpers:
         """Test with a more realistic GeoJSON structure"""
         geojson_data = {
             "type": "FeatureCollection",
-            "crs": {
-                "type": "name",
-                "properties": {"name": "EPSG:4326"}
-            },
+            "crs": {"type": "name", "properties": {"name": "EPSG:4326"}},
             "features": [
                 {
                     "type": "Feature",
-                    "properties": {
-                        "id": 1,
-                        "building_type": "residential",
-                        "area": 1500.0
-                    },
+                    "properties": {"id": 1, "building_type": "residential", "area": 1500.0},
                     "geometry": {
                         "type": "Polygon",
                         "coordinates": [
-                            [
-                                [-104.9903, 39.7392],
-                                [-104.9883, 39.7392],
-                                [-104.9883, 39.7412],
-                                [-104.9903, 39.7412],
-                                [-104.9903, 39.7392]
-                            ]
-                        ]
-                    }
+                            [[-104.9903, 39.7392], [-104.9883, 39.7392], [-104.9883, 39.7412], [-104.9903, 39.7412], [-104.9903, 39.7392]]
+                        ],
+                    },
                 }
-            ]
+            ],
         }
 
         coordinates = extract_coordinates(geojson_data)

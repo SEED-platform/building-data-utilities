@@ -13,11 +13,7 @@ class TestCommonTypes:
     def test_location_type_basic(self):
         """Test basic Location type usage"""
         # Create a Location
-        location = Location(
-            street="123 Main St",
-            city="Denver",
-            state="CO"
-        )
+        location = Location(street="123 Main St", city="Denver", state="CO")
 
         # Check that it has the expected fields
         assert location["street"] == "123 Main St"
@@ -26,11 +22,7 @@ class TestCommonTypes:
 
     def test_location_type_dict_access(self):
         """Test that Location works like a dictionary"""
-        location = Location(
-            street="456 Oak Ave",
-            city="Boulder",
-            state="CO"
-        )
+        location = Location(street="456 Oak Ave", city="Boulder", state="CO")
 
         # Test dictionary-style access
         assert location.get("street") == "456 Oak Ave"
@@ -46,11 +38,7 @@ class TestCommonTypes:
 
     def test_location_type_iteration(self):
         """Test that Location can be iterated over"""
-        location = Location(
-            street="789 Pine St",
-            city="Colorado Springs",
-            state="CO"
-        )
+        location = Location(street="789 Pine St", city="Colorado Springs", state="CO")
 
         # Test iteration
         keys = list(location.keys())
@@ -67,11 +55,7 @@ class TestCommonTypes:
 
     def test_location_type_update(self):
         """Test that Location can be updated like a dict"""
-        location = Location(
-            street="111 Test St",
-            city="Test City",
-            state="TX"
-        )
+        location = Location(street="111 Test St", city="Test City", state="TX")
 
         # Update values
         location["city"] = "Updated City"
@@ -83,11 +67,7 @@ class TestCommonTypes:
 
     def test_location_type_from_dict(self):
         """Test creating Location from dictionary"""
-        data = {
-            "street": "222 Example Rd",
-            "city": "Example City",
-            "state": "NY"
-        }
+        data = {"street": "222 Example Rd", "city": "Example City", "state": "NY"}
 
         # Create Location from dict
         location = Location(**data)
@@ -98,23 +78,11 @@ class TestCommonTypes:
 
     def test_location_type_equality(self):
         """Test Location equality comparison"""
-        location1 = Location(
-            street="333 Same St",
-            city="Same City",
-            state="FL"
-        )
+        location1 = Location(street="333 Same St", city="Same City", state="FL")
 
-        location2 = Location(
-            street="333 Same St",
-            city="Same City",
-            state="FL"
-        )
+        location2 = Location(street="333 Same St", city="Same City", state="FL")
 
-        location3 = Location(
-            street="444 Different St",
-            city="Same City",
-            state="FL"
-        )
+        location3 = Location(street="444 Different St", city="Same City", state="FL")
 
         # Test equality
         assert location1 == location2
@@ -122,11 +90,7 @@ class TestCommonTypes:
 
     def test_location_type_copy(self):
         """Test copying Location objects"""
-        original = Location(
-            street="555 Original St",
-            city="Original City",
-            state="WA"
-        )
+        original = Location(street="555 Original St", city="Original City", state="WA")
 
         # Create a copy and modify it
         copy = original.copy()
@@ -140,11 +104,7 @@ class TestCommonTypes:
     def test_location_type_required_fields(self):
         """Test that Location requires all expected fields"""
         # This should work (all required fields present)
-        complete_location = Location(
-            street="666 Complete St",
-            city="Complete City",
-            state="OR"
-        )
+        complete_location = Location(street="666 Complete St", city="Complete City", state="OR")
         assert complete_location is not None
 
         # Test that we can create partial locations if needed
@@ -162,11 +122,7 @@ class TestCommonTypes:
 
     def test_location_type_string_representation(self):
         """Test string representation of Location"""
-        location = Location(
-            street="888 String St",
-            city="String City",
-            state="ID"
-        )
+        location = Location(street="888 String St", city="String City", state="ID")
 
         # Convert to string and check it contains the data
         location_str = str(location)
@@ -179,7 +135,7 @@ class TestCommonTypes:
         locations = [
             Location(street="100 First St", city="City1", state="CA"),
             Location(street="200 Second St", city="City2", state="CA"),
-            Location(street="300 Third St", city="City3", state="CA")
+            Location(street="300 Third St", city="City3", state="CA"),
         ]
 
         # Test list operations

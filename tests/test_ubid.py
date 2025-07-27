@@ -6,12 +6,8 @@ Simple tests for encoding/decoding and GeoDataFrame operations
 
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
-from cbl_workflow.utils.ubid import (
-    encode_ubid,
-    bounding_box,
-    centroid,
-    add_ubid_to_geodataframe
-)
+
+from cbl_workflow.utils.ubid import add_ubid_to_geodataframe, bounding_box, centroid, encode_ubid
 
 
 class TestUBIDUtils:
@@ -99,15 +95,8 @@ class TestUBIDUtils:
     def test_add_ubid_to_geodataframe_basic(self):
         """Test adding UBID to a simple GeoDataFrame"""
         # Create test GeoDataFrame with polygons
-        polygons = [
-            Polygon([(-105, 39), (-104, 39), (-104, 40), (-105, 40)]),
-            Polygon([(-103, 39), (-102, 39), (-102, 40), (-103, 40)])
-        ]
-        data = {
-            "id": [1, 2],
-            "name": ["Building A", "Building B"],
-            "geometry": polygons
-        }
+        polygons = [Polygon([(-105, 39), (-104, 39), (-104, 40), (-105, 40)]), Polygon([(-103, 39), (-102, 39), (-102, 40), (-103, 40)])]
+        data = {"id": [1, 2], "name": ["Building A", "Building B"], "geometry": polygons}
         gdf = gpd.GeoDataFrame(data, crs="EPSG:4326")
 
         # Add UBID
@@ -131,16 +120,10 @@ class TestUBIDUtils:
         """Test adding UBID with additional centroid and bbox columns"""
         # Create test GeoDataFrame
         polygon = Polygon([(-105, 39), (-104, 39), (-104, 40), (-105, 40)])
-        gdf = gpd.GeoDataFrame(
-            {"id": [1], "geometry": [polygon]},
-            crs="EPSG:4326"
-        )
+        gdf = gpd.GeoDataFrame({"id": [1], "geometry": [polygon]}, crs="EPSG:4326")
 
         # Add UBID with additional columns
-        result_gdf = add_ubid_to_geodataframe(
-            gdf,
-            additional_ubid_columns_to_create=["ubid_centroid", "ubid_bbox"]
-        )
+        result_gdf = add_ubid_to_geodataframe(gdf, additional_ubid_columns_to_create=["ubid_centroid", "ubid_bbox"])
 
         # Check all expected columns are present
         assert "ubid" in result_gdf.columns
@@ -158,14 +141,8 @@ class TestUBIDUtils:
     def test_add_ubid_with_points(self):
         """Test adding UBID to a GeoDataFrame with point geometries"""
         # Create test GeoDataFrame with points
-        points = [
-            Point(-104.5, 39.5),
-            Point(-102.5, 39.5)
-        ]
-        gdf = gpd.GeoDataFrame(
-            {"id": [1, 2], "geometry": points},
-            crs="EPSG:4326"
-        )
+        points = [Point(-104.5, 39.5), Point(-102.5, 39.5)]
+        gdf = gpd.GeoDataFrame({"id": [1, 2], "geometry": points}, crs="EPSG:4326")
 
         # Add UBID - this should work even with points
         result_gdf = add_ubid_to_geodataframe(gdf)
@@ -179,10 +156,7 @@ class TestUBIDUtils:
         """Test that adding UBID preserves the original CRS"""
         # Create test GeoDataFrame in different CRS
         polygon = Polygon([(-105, 39), (-104, 39), (-104, 40), (-105, 40)])
-        gdf = gpd.GeoDataFrame(
-            {"id": [1], "geometry": [polygon]},
-            crs="EPSG:4326"
-        )
+        gdf = gpd.GeoDataFrame({"id": [1], "geometry": [polygon]}, crs="EPSG:4326")
 
         # Add UBID
         result_gdf = add_ubid_to_geodataframe(gdf)
@@ -193,10 +167,7 @@ class TestUBIDUtils:
     def test_add_ubid_empty_dataframe(self):
         """Test adding UBID to an empty GeoDataFrame"""
         # Create empty GeoDataFrame
-        gdf = gpd.GeoDataFrame(
-            {"id": [], "geometry": []},
-            crs="EPSG:4326"
-        )
+        gdf = gpd.GeoDataFrame({"id": [], "geometry": []}, crs="EPSG:4326")
 
         # Add UBID
         result_gdf = add_ubid_to_geodataframe(gdf)

@@ -5,12 +5,9 @@ Simple tests for address geocoding functionality
 """
 
 from unittest.mock import Mock, patch
-from cbl_workflow.utils.geocode_addresses import (
-    _process_result,
-    geocode_addresses,
-    MapQuestAPIKeyError
-)
+
 from cbl_workflow.utils.common import Location
+from cbl_workflow.utils.geocode_addresses import MapQuestAPIKeyError, _process_result, geocode_addresses
 
 
 class TestGeocodeAddresses:
@@ -20,21 +17,23 @@ class TestGeocodeAddresses:
         """Test processing a valid single geocoding result"""
         # Mock a valid MapQuest response
         mock_result = {
-            "locations": [{
-                "geocodeQualityCode": "P1AAA",  # Point-level, high confidence
-                "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                "street": "123 Main St",
-                "postalCode": "80202",
-                "sideOfStreet": "R",
-                "adminArea1": "US",
-                "adminArea1Type": "Country",
-                "adminArea3": "Denver",
-                "adminArea3Type": "City",
-                "adminArea4": "Denver County",
-                "adminArea4Type": "County",
-                "adminArea5": "CO",
-                "adminArea5Type": "State"
-            }]
+            "locations": [
+                {
+                    "geocodeQualityCode": "P1AAA",  # Point-level, high confidence
+                    "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
+                    "street": "123 Main St",
+                    "postalCode": "80202",
+                    "sideOfStreet": "R",
+                    "adminArea1": "US",
+                    "adminArea1Type": "Country",
+                    "adminArea3": "Denver",
+                    "adminArea3Type": "City",
+                    "adminArea4": "Denver County",
+                    "adminArea4Type": "County",
+                    "adminArea5": "CO",
+                    "adminArea5Type": "State",
+                }
+            ]
         }
 
         result = _process_result(mock_result)
@@ -59,12 +58,7 @@ class TestGeocodeAddresses:
 
     def test_process_result_multiple_locations(self):
         """Test processing result with multiple locations (ambiguous)"""
-        mock_result = {
-            "locations": [
-                {"geocodeQualityCode": "P1AAA"},
-                {"geocodeQualityCode": "P1AAA"}
-            ]
-        }
+        mock_result = {"locations": [{"geocodeQualityCode": "P1AAA"}, {"geocodeQualityCode": "P1AAA"}]}
 
         result = _process_result(mock_result)
         assert result["quality"] == "Ambiguous"
@@ -72,11 +66,13 @@ class TestGeocodeAddresses:
     def test_process_result_low_quality(self):
         """Test processing result with low quality geocoding"""
         mock_result = {
-            "locations": [{
-                "geocodeQualityCode": "A5CCC",  # Low confidence
-                "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                "street": "123 Main St"
-            }]
+            "locations": [
+                {
+                    "geocodeQualityCode": "A5CCC",  # Low confidence
+                    "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
+                    "street": "123 Main St",
+                }
+            ]
         }
 
         result = _process_result(mock_result)
@@ -88,11 +84,13 @@ class TestGeocodeAddresses:
     def test_process_result_unacceptable_granularity(self):
         """Test processing result with unacceptable granularity level"""
         mock_result = {
-            "locations": [{
-                "geocodeQualityCode": "Z1AAA",  # Bad granularity
-                "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                "street": "123 Main St"
-            }]
+            "locations": [
+                {
+                    "geocodeQualityCode": "Z1AAA",  # Bad granularity
+                    "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
+                    "street": "123 Main St",
+                }
+            ]
         }
 
         result = _process_result(mock_result)
@@ -102,43 +100,47 @@ class TestGeocodeAddresses:
     def test_process_result_confidence_with_c_or_x(self):
         """Test processing result with C or X in confidence rating"""
         mock_result = {
-            "locations": [{
-                "geocodeQualityCode": "P1ACX",  # Has C and X
-                "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                "street": "123 Main St"
-            }]
+            "locations": [
+                {
+                    "geocodeQualityCode": "P1ACX",  # Has C and X
+                    "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
+                    "street": "123 Main St",
+                }
+            ]
         }
 
         result = _process_result(mock_result)
         assert result["quality"] == "P1ACX"
         assert "latitude" not in result
 
-    @patch('cbl_workflow.utils.geocode_addresses.requests.post')
+    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_success(self, mock_post):
         """Test successful geocoding of addresses"""
         # Mock successful response
         mock_response = Mock()
         mock_response.status_code = 200
         mock_response.json.return_value = {
-            "results": [{
-                "locations": [{
-                    "geocodeQualityCode": "P1AAA",
-                    "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                    "street": "123 Main St",
-                    "postalCode": "80202",
-                    "adminArea3": "Denver",
-                    "adminArea3Type": "City",
-                    "adminArea5": "CO",
-                    "adminArea5Type": "State"
-                }]
-            }]
+            "results": [
+                {
+                    "locations": [
+                        {
+                            "geocodeQualityCode": "P1AAA",
+                            "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
+                            "street": "123 Main St",
+                            "postalCode": "80202",
+                            "adminArea3": "Denver",
+                            "adminArea3Type": "City",
+                            "adminArea5": "CO",
+                            "adminArea5Type": "State",
+                        }
+                    ]
+                }
+            ]
         }
         mock_post.return_value = mock_response
 
         # Test data
-        locations = [
-            Location(street="123 Main St", city="Denver", state="CO")
-        ]
+        locations = [Location(street="123 Main St", city="Denver", state="CO")]
 
         # Geocode
         results = geocode_addresses(locations, "fake_api_key")
@@ -155,59 +157,54 @@ class TestGeocodeAddresses:
         assert "mapquestapi.com" in call_args[0][0]
         assert "fake_api_key" in call_args[0][0]
 
-    @patch('cbl_workflow.utils.geocode_addresses.requests.post')
+    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_invalid_api_key_401(self, mock_post):
         """Test handling of invalid API key (401 error)"""
+        import pytest
+
         mock_response = Mock()
         mock_response.status_code = 401
         mock_response.content = b"Invalid API key"
         mock_post.return_value = mock_response
 
-        locations = [
-            Location(street="123 Main St", city="Denver", state="CO")
-        ]
+        locations = [Location(street="123 Main St", city="Denver", state="CO")]
 
-        try:
+        with pytest.raises(MapQuestAPIKeyError, match="API Key is invalid"):
             geocode_addresses(locations, "invalid_key")
-            assert False, "Expected MapQuestAPIKeyError"
-        except MapQuestAPIKeyError as e:
-            assert "API Key is invalid" in str(e)
 
-    @patch('cbl_workflow.utils.geocode_addresses.requests.post')
+    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_api_limit_403(self, mock_post):
         """Test handling of API limit exceeded (403 error)"""
+        import pytest
+
         mock_response = Mock()
         mock_response.status_code = 403
         mock_post.return_value = mock_response
 
-        locations = [
-            Location(street="123 Main St", city="Denver", state="CO")
-        ]
+        locations = [Location(street="123 Main St", city="Denver", state="CO")]
 
-        try:
+        with pytest.raises(MapQuestAPIKeyError, match="at its limit"):
             geocode_addresses(locations, "limited_key")
-            assert False, "Expected MapQuestAPIKeyError"
-        except MapQuestAPIKeyError as e:
-            assert "at its limit" in str(e)
 
-    @patch('cbl_workflow.utils.geocode_addresses.requests.post')
+    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_chunking(self, mock_post):
         """Test that large lists are properly chunked"""
+
         # Mock response for each chunk - each response contains results for
         # ALL locations in that chunk
         def mock_response_generator(*args, **kwargs):
             # Get the locations from the request
-            locations_in_request = kwargs.get('json', {}).get('locations', [])
+            locations_in_request = kwargs.get("json", {}).get("locations", [])
             results = []
             for _ in locations_in_request:
-                results.append({
-                    "locations": [{
-                        "geocodeQualityCode": "P1AAA",
-                        "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                        "street": "123 Main St"
-                    }]
-                })
-            
+                results.append(
+                    {
+                        "locations": [
+                            {"geocodeQualityCode": "P1AAA", "displayLatLng": {"lng": -104.9903, "lat": 39.7392}, "street": "123 Main St"}
+                        ]
+                    }
+                )
+
             mock_response = Mock()
             mock_response.status_code = 200
             mock_response.json.return_value = {"results": results}
@@ -218,13 +215,7 @@ class TestGeocodeAddresses:
         # Create more than 100 locations to test chunking
         locations = []
         for i in range(150):
-            locations.append(
-                Location(
-                    street=f"{i} Test St",
-                    city="Denver",
-                    state="CO"
-                )
-            )
+            locations.append(Location(street=f"{i} Test St", city="Denver", state="CO"))
 
         results = geocode_addresses(locations, "test_key")
 
@@ -239,7 +230,7 @@ class TestGeocodeAddresses:
         results = geocode_addresses([], "test_key")
         assert results == []
 
-    @patch('cbl_workflow.utils.geocode_addresses.requests.post')
+    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_mixed_quality_results(self, mock_post):
         """Test geocoding with mixed quality results"""
         mock_response = Mock()
@@ -247,25 +238,18 @@ class TestGeocodeAddresses:
         mock_response.json.return_value = {
             "results": [
                 {  # Good result
-                    "locations": [{
-                        "geocodeQualityCode": "P1AAA",
-                        "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                        "street": "123 Main St"
-                    }]
+                    "locations": [
+                        {"geocodeQualityCode": "P1AAA", "displayLatLng": {"lng": -104.9903, "lat": 39.7392}, "street": "123 Main St"}
+                    ]
                 },
                 {  # Poor quality result
-                    "locations": [{
-                        "geocodeQualityCode": "A5CCC",
-                        "displayLatLng": {"lng": -104.9903, "lat": 39.7392},
-                        "street": "456 Oak St"
-                    }]
+                    "locations": [
+                        {"geocodeQualityCode": "A5CCC", "displayLatLng": {"lng": -104.9903, "lat": 39.7392}, "street": "456 Oak St"}
+                    ]
                 },
                 {  # Ambiguous result
-                    "locations": [
-                        {"geocodeQualityCode": "P1AAA"},
-                        {"geocodeQualityCode": "P1AAA"}
-                    ]
-                }
+                    "locations": [{"geocodeQualityCode": "P1AAA"}, {"geocodeQualityCode": "P1AAA"}]
+                },
             ]
         }
         mock_post.return_value = mock_response
@@ -273,7 +257,7 @@ class TestGeocodeAddresses:
         locations = [
             Location(street="123 Main St", city="Denver", state="CO"),
             Location(street="456 Oak St", city="Denver", state="CO"),
-            Location(street="789 Pine St", city="Denver", state="CO")
+            Location(street="789 Pine St", city="Denver", state="CO"),
         ]
 
         results = geocode_addresses(locations, "test_key")

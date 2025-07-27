@@ -5,17 +5,14 @@ Simple tests for OSM data retrieval and geocoding
 """
 
 from unittest.mock import Mock, patch
-from cbl_workflow.utils.open_street_map import (
-    reverse_geocode,
-    get_building_id_from_osm_id,
-    download_building
-)
+
+from cbl_workflow.utils.open_street_map import download_building, get_building_id_from_osm_id, reverse_geocode
 
 
 class TestOpenStreetMapUtils:
     """Simple tests for OpenStreetMap utility functions"""
 
-    @patch('cbl_workflow.utils.open_street_map.Nominatim')
+    @patch("cbl_workflow.utils.open_street_map.Nominatim")
     def test_reverse_geocode_basic(self, mock_nominatim_class):
         """Test basic reverse geocoding functionality"""
         # Mock the geocoding response
@@ -23,13 +20,7 @@ class TestOpenStreetMapUtils:
         mock_location.raw = {
             "place_id": 123456,
             "display_name": "123 Main St, Denver, CO, USA",
-            "address": {
-                "house_number": "123",
-                "road": "Main Street",
-                "city": "Denver",
-                "state": "Colorado",
-                "country": "United States"
-            }
+            "address": {"house_number": "123", "road": "Main Street", "city": "Denver", "state": "Colorado", "country": "United States"},
         }
 
         mock_geolocator = Mock()
@@ -43,18 +34,14 @@ class TestOpenStreetMapUtils:
         mock_nominatim_class.assert_called_once_with(user_agent="CBL")
 
         # Check that reverse was called with correct parameters
-        mock_geolocator.reverse.assert_called_once_with(
-            (39.7392, -104.9903),
-            language="en",
-            exactly_one=True
-        )
+        mock_geolocator.reverse.assert_called_once_with((39.7392, -104.9903), language="en", exactly_one=True)
 
         # Check result
         assert result["place_id"] == 123456
         assert "Main St" in result["display_name"]
         assert result["address"]["city"] == "Denver"
 
-    @patch('cbl_workflow.utils.open_street_map.Nominatim')
+    @patch("cbl_workflow.utils.open_street_map.Nominatim")
     def test_reverse_geocode_no_results(self, mock_nominatim_class):
         """Test reverse geocoding when no results found"""
         mock_geolocator = Mock()
@@ -69,17 +56,13 @@ class TestOpenStreetMapUtils:
             # This is expected if trying to access .raw on None
             pass
 
-    @patch('cbl_workflow.utils.open_street_map.requests.post')
+    @patch("cbl_workflow.utils.open_street_map.requests.post")
     def test_get_building_id_from_osm_id_success(self, mock_post):
         """Test successful building ID retrieval"""
         # Mock successful Overpass API response
         mock_response = Mock()
         mock_response.status_code = 200
-        mock_response.json.return_value = {
-            "elements": [
-                {"id": 12345, "type": "way"}
-            ]
-        }
+        mock_response.json.return_value = {"elements": [{"id": 12345, "type": "way"}]}
         mock_post.return_value = mock_response
 
         result = get_building_id_from_osm_id(12345)
@@ -93,7 +76,7 @@ class TestOpenStreetMapUtils:
         # Check result
         assert result == 12345
 
-    @patch('cbl_workflow.utils.open_street_map.requests.post')
+    @patch("cbl_workflow.utils.open_street_map.requests.post")
     def test_get_building_id_from_osm_id_not_found(self, mock_post):
         """Test building ID retrieval when building not found"""
         # Mock response with no elements
@@ -106,7 +89,7 @@ class TestOpenStreetMapUtils:
 
         assert result == "Building ID not found for the given place ID."
 
-    @patch('cbl_workflow.utils.open_street_map.requests.post')
+    @patch("cbl_workflow.utils.open_street_map.requests.post")
     def test_get_building_id_from_osm_id_api_error(self, mock_post):
         """Test building ID retrieval when API returns error"""
         # Mock failed response
@@ -118,7 +101,7 @@ class TestOpenStreetMapUtils:
 
         assert result == "Error: Failed to retrieve building ID."
 
-    @patch('cbl_workflow.utils.open_street_map.requests.post')
+    @patch("cbl_workflow.utils.open_street_map.requests.post")
     def test_get_building_id_from_osm_id_multiple_elements(self, mock_post):
         """Test building ID retrieval with multiple elements"""
         # Mock response with multiple elements (should return first with ID)
@@ -128,7 +111,7 @@ class TestOpenStreetMapUtils:
             "elements": [
                 {"type": "way", "tags": {}},  # No ID
                 {"id": 12345, "type": "way"},  # This should be returned
-                {"id": 67890, "type": "way"}   # This should be ignored
+                {"id": 67890, "type": "way"},  # This should be ignored
             ]
         }
         mock_post.return_value = mock_response
@@ -137,7 +120,7 @@ class TestOpenStreetMapUtils:
 
         assert result == 12345
 
-    @patch('cbl_workflow.utils.open_street_map.requests.post')
+    @patch("cbl_workflow.utils.open_street_map.requests.post")
     def test_download_building_basic(self, mock_post):
         """Test basic building download functionality"""
         # Mock successful Overpass API response for building data
@@ -149,11 +132,7 @@ class TestOpenStreetMapUtils:
                     "type": "way",
                     "id": 12345,
                     "nodes": [1, 2, 3, 4, 1],
-                    "tags": {
-                        "building": "residential",
-                        "addr:street": "Main Street",
-                        "addr:housenumber": "123"
-                    }
+                    "tags": {"building": "residential", "addr:street": "Main Street", "addr:housenumber": "123"},
                 }
             ]
         }
@@ -171,13 +150,13 @@ class TestOpenStreetMapUtils:
     def test_overpass_url_constant(self):
         """Test that OVERPASS_URL is properly defined"""
         from cbl_workflow.utils.open_street_map import OVERPASS_URL
-        
+
         assert OVERPASS_URL is not None
         assert isinstance(OVERPASS_URL, str)
         assert "overpass" in OVERPASS_URL.lower()
         assert OVERPASS_URL.startswith("http")
 
-    @patch('cbl_workflow.utils.open_street_map.requests.post')
+    @patch("cbl_workflow.utils.open_street_map.requests.post")
     def test_get_building_id_query_format(self, mock_post):
         """Test that the Overpass query is properly formatted"""
         mock_response = Mock()
@@ -196,10 +175,8 @@ class TestOpenStreetMapUtils:
         assert "way(id:12345)" in query
         assert "out ids" in query
 
-    @patch('cbl_workflow.utils.open_street_map.Nominatim')
-    def test_reverse_geocode_rate_limiting_consideration(
-            self, mock_nominatim_class
-    ):
+    @patch("cbl_workflow.utils.open_street_map.Nominatim")
+    def test_reverse_geocode_rate_limiting_consideration(self, mock_nominatim_class):
         """Test that reverse geocoding is set up to respect rate limits"""
         mock_location = Mock()
         mock_location.raw = {"place_id": 123}
@@ -219,7 +196,7 @@ class TestOpenStreetMapUtils:
         call_kwargs = mock_geolocator.reverse.call_args[1]
         assert call_kwargs["exactly_one"] is True
 
-    @patch('cbl_workflow.utils.open_street_map.requests.post')
+    @patch("cbl_workflow.utils.open_street_map.requests.post")
     def test_api_integration_parameters(self, mock_post):
         """Test that API calls use correct parameters"""
         mock_response = Mock()
