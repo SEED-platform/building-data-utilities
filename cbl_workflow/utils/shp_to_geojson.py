@@ -4,10 +4,9 @@ SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and othe
 See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
-
 import os
-from pathlib import Path
 import typing
+from pathlib import Path
 
 import geopandas as gpd
 from pyproj import CRS
