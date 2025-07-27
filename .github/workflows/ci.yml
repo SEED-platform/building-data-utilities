@@ -24,5 +24,11 @@ jobs:
           poetry install
       - name: Run pre-commit
         run: poetry run pre-commit run --all-files
-      - name: Run Python Tests
+      - name: Run Python Tests with Coverage
         run: poetry run pytest
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: matrix.python-version == '3.12'
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: true

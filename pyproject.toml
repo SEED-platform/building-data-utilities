@@ -25,6 +25,25 @@ geopy = "^2.4.1"
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^4.0.1"
 pytest = "^8.3.5"
+pytest-cov = "^5.0.0"
+
+[tool.pytest.ini_options]
+# Configure pytest warning filters
+filterwarnings = [
+    # Ignore pkg_resources deprecation warnings from external packages
+    "ignore:pkg_resources is deprecated:DeprecationWarning",
+    "ignore:Deprecated call to.*pkg_resources:DeprecationWarning",
+    # Ignore shapefile column name truncation warnings
+    "ignore:Column names longer than 10 characters:UserWarning",
+    "ignore:Normalized/laundered field name:RuntimeWarning",
+    # Ignore potential NumPy scalar conversion warnings
+    "ignore:Conversion of an array with ndim > 0 to a scalar is deprecated:DeprecationWarning",
+    # Ignore other common geospatial warnings
+    "ignore:.*CRS mismatch.*:UserWarning",
+    "ignore:.*geometry is in a geographic CRS.*:UserWarning",
+]
+# Coverage configuration
+addopts = "--cov=cbl_workflow --cov-report=term-missing --cov-report=xml --cov-fail-under=59"
 
 [build-system]
 # Need to provide the build system information for the package to be built
