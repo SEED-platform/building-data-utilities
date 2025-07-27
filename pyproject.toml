@@ -11,7 +11,7 @@ python = ">=3.9, <3.13"
 
 # use https because SSH doesn't work on github actions.
 pnnl-buildingid = {git = "https://github.com/seed-platform/buildingid.git", rev = "main"}
-usaddress = "0.5.14"
+usaddress = "0.5.15"
 street-address = "0.4.0"
 geopandas = "^1.0.1"
 mercantile = "^1.2.1"
