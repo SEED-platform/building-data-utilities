@@ -12,7 +12,7 @@ import tempfile
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
 
-from cbl_workflow.utils.shp_to_geojson import shp_to_geojson
+from building_data_utilities.utils.shp_to_geojson import shp_to_geojson
 
 
 class TestShpToGeoJSON:

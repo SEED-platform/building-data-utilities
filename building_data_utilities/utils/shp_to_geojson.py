@@ -11,7 +11,7 @@ from pathlib import Path
 import geopandas as gpd
 from pyproj import CRS
 
-from cbl_workflow.utils.ubid import add_ubid_to_geodataframe
+from building_data_utilities.utils.ubid import add_ubid_to_geodataframe
 
 
 def shp_to_geojson(shapefile: typing.Union[str, Path]):

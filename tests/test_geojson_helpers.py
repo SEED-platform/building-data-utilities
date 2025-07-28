@@ -4,7 +4,7 @@ Tests for GeoJSON helper utilities
 Simple tests for GeoJSON data manipulation
 """
 
-from cbl_workflow.utils.geojson_helpers import extract_coordinates
+from building_data_utilities.utils.geojson_helpers import extract_coordinates
 
 
 class TestGeoJSONHelpers:

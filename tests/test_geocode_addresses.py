@@ -6,8 +6,8 @@ Simple tests for address geocoding functionality
 
 from unittest.mock import Mock, patch
 
-from cbl_workflow.utils.common import Location
-from cbl_workflow.utils.geocode_addresses import MapQuestAPIKeyError, _process_result, geocode_addresses
+from building_data_utilities.utils.common import Location
+from building_data_utilities.utils.geocode_addresses import MapQuestAPIKeyError, _process_result, geocode_addresses
 
 
 class TestGeocodeAddresses:
@@ -113,7 +113,7 @@ class TestGeocodeAddresses:
         assert result["quality"] == "P1ACX"
         assert "latitude" not in result
 
-    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_success(self, mock_post):
         """Test successful geocoding of addresses"""
         # Mock successful response
@@ -157,7 +157,7 @@ class TestGeocodeAddresses:
         assert "mapquestapi.com" in call_args[0][0]
         assert "fake_api_key" in call_args[0][0]
 
-    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_invalid_api_key_401(self, mock_post):
         """Test handling of invalid API key (401 error)"""
         import pytest
@@ -172,7 +172,7 @@ class TestGeocodeAddresses:
         with pytest.raises(MapQuestAPIKeyError, match="API Key is invalid"):
             geocode_addresses(locations, "invalid_key")
 
-    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_api_limit_403(self, mock_post):
         """Test handling of API limit exceeded (403 error)"""
         import pytest
@@ -186,7 +186,7 @@ class TestGeocodeAddresses:
         with pytest.raises(MapQuestAPIKeyError, match="at its limit"):
             geocode_addresses(locations, "limited_key")
 
-    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_chunking(self, mock_post):
         """Test that large lists are properly chunked"""
 
@@ -230,7 +230,7 @@ class TestGeocodeAddresses:
         results = geocode_addresses([], "test_key")
         assert results == []
 
-    @patch("cbl_workflow.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_mixed_quality_results(self, mock_post):
         """Test geocoding with mixed quality results"""
         mock_response = Mock()

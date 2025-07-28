@@ -4,7 +4,7 @@ Tests for common utilities and types
 Simple tests for shared data structures
 """
 
-from cbl_workflow.utils.common import Location
+from building_data_utilities.utils.common import Location
 
 
 class TestCommonTypes:
