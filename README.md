@@ -1,8 +1,8 @@
-# CBL Workflow
+# Building Data Utilities
 
-> Covered Building List Workflow
+> Building Data Utilities Workflow
 
-Given a list of addresses, this workflow will automatically:
+Given a list of addresses, this workflow will automatically go through the following steps:
 
 - Normalize each address
 - Geocode each address via MapQuest to a lat/long coordinate

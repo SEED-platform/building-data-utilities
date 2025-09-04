@@ -6,8 +6,8 @@ See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 
 import requests
 
-from cbl_workflow.utils.chunk import chunk
-from cbl_workflow.utils.common import Location
+from building_data_utilities.utils.chunk import chunk
+from building_data_utilities.utils.common import Location
 
 
 class MapQuestAPIKeyError(Exception):

@@ -4,7 +4,7 @@ Tests for address normalization utilities
 Simple integration-style tests that are easy to understand
 """
 
-from cbl_workflow.utils.normalize_address import (
+from building_data_utilities.utils.normalize_address import (
     _normalize_address_direction,
     _normalize_address_number,
     _normalize_address_post_type,

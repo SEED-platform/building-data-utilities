@@ -1,10 +1,11 @@
+
 [tool.poetry]
-name = "cbl-workflow"
+name = "building-data-utilities"
 version = "0.1.0"
-description = ""
+description = "Utilities for parsing and understanding building-related data to support covered building list development."
 authors = ["Alex Swindler <alex.swinder@nrel.gov>", "Nicholas Long <nicholas.long@nrel.gov>"]
 readme = "README.md"
-packages = [{ include = "cbl_workflow", from = "." }]
+packages = [{ include = "building_data_utilities", from = "." }]
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.13"
@@ -43,7 +44,7 @@ filterwarnings = [
     "ignore:.*geometry is in a geographic CRS.*:UserWarning",
 ]
 # Coverage configuration
-addopts = "--cov=cbl_workflow --cov-report=term-missing --cov-report=xml --cov-fail-under=50"
+addopts = "--cov=building_data_utilities --cov-report=term-missing --cov-report=xml --cov-fail-under=50"
 
 [build-system]
 # Need to provide the build system information for the package to be built
