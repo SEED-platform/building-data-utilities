@@ -5,6 +5,7 @@ See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 from typing import Any
+
 import requests
 
 from building_data_utilities.utils.chunk import chunk
@@ -22,11 +23,11 @@ def _process_result(result):
     According to Amazon Location Services API
     MatchScore -> Overall field holds the confidence level of the geocoding result.
     The confidence level is a value between 0.0 and 1.0, where:
-    1.0 → A perfect match. The service is highly confident that the returned result is the intended location.
-    0.75–0.99 → A strong match, usually correct but possibly with minor differences (e.g., formatting or missing elements).
-    0.5–0.74 → A moderate match. The result is somewhat relevant but may differ in address details, city, or type.
-    0.1–0.49 → A weak match. The returned place is loosely related (e.g., matching only the city name but not the street).
-    0.0 → No meaningful match (rarely returned, since results with 0 confidence are usually omitted).
+    1.0: A perfect match. The service is highly confident that the returned result is the intended location.
+    0.75 - 0.99: A strong match, usually correct but possibly with minor differences (e.g., formatting or missing elements).
+    0.5 - 0.74: A moderate match. The result is somewhat relevant but may differ in address details, city, or type.
+    0.1 - 0.49: A weak match. The returned place is loosely related (e.g., matching only the city name but not the street).
+    0.0: No meaningful match (rarely returned, since results with 0 confidence are usually omitted).
 
     We will accept a confidence level > 0.90 for now
     """
@@ -45,7 +46,7 @@ def _process_result(result):
         long = res.get("Position")[0]
         lat = res.get("Position")[1]
         # just take the first part of the postal code if there's a +4
-        postal_code = res.get('Address').get('PostalCode').split("-")[0] if res.get('Address').get('PostalCode') else None
+        postal_code = res.get("Address").get("PostalCode").split("-")[0] if res.get("Address").get("PostalCode") else None
         # reconstruct a full street address from the parts
         street_address = f"{res.get('Address').get('AddressNumber')} {res.get('Address').get('Street')}"
 
@@ -55,16 +56,18 @@ def _process_result(result):
             "longitude": long,
             "latitude": lat,
             "postal_code": postal_code,
-            "city": res.get('Address').get('Locality'),
-            "state": res.get('Address').get('Region', {}).get('Code'),
-            "country": res.get('Address').get('Country', {}).get('Code2'),
+            "city": res.get("Address").get("Locality"),
+            "state": res.get("Address").get("Region", {}).get("Code"),
+            "country": res.get("Address").get("Country", {}).get("Code2"),
         }
         return d
     else:
         return {"quality": quality}
 
 
-def geocode_addresses(locations: list[Location], amazon_api_key: str, amazon_base_api: str, amazon_app_id: str | None = None) -> list[dict[str, Any]]:
+def geocode_addresses(
+    locations: list[Location], amazon_api_key: str, amazon_base_api: str, amazon_app_id: str | None = None
+) -> list[dict[str, Any]]:
     results = []
 
     # Amazon Location Services is limited to 1 address per request, 100 requests per second
@@ -72,25 +75,26 @@ def geocode_addresses(locations: list[Location], amazon_api_key: str, amazon_bas
     # URL example: https://places.geo.us-east-2.api.aws/v2/geocode?api_key
     # NREL URL example: https://developer.nrel.gov/api/tada/amazon-location-service/places/v2/geocode?api_key
     for location_chunk in chunk(locations, chunk_size=1):
-
         # reformat location chunk to a string list of addresses
         # data that could be in there are: street, city, state, postal_code, country
         # street is required, the rest are optional
         # should at least provide city and state for a good result though
-        location_chunk = [
+        processed_address = [
             ", ".join(
-                part for part in [
-                    loc.get('street'),
-                    loc.get('city', ''),
-                    loc.get('state', ''),
-                    loc.get('postal_code', ''),
-                    loc.get('country', '')
-                ] if part
+                part
+                for part in [
+                    loc.get("street"),
+                    loc.get("city", ""),
+                    loc.get("state", ""),
+                    loc.get("postal_code", ""),
+                    loc.get("country", ""),
+                ]
+                if part
             )
             for loc in location_chunk
         ]
-        location_chunk = [loc.strip(", ") for loc in location_chunk]  # remove any leading/trailing commas
-        location_chunk = "\n".join(location_chunk)  # join into a single string with newlines
+        clean_address = [loc.strip(", ") for loc in processed_address]  # remove any leading/trailing commas
+        query_str = "\n".join(clean_address)  # join into a single string with newlines
 
         url_str = f"{amazon_base_api}/geocode/?api_key={amazon_api_key}"
         if amazon_app_id:
@@ -98,7 +102,7 @@ def geocode_addresses(locations: list[Location], amazon_api_key: str, amazon_bas
         response = requests.post(
             url_str,
             json={
-                "QueryText": location_chunk,
+                "QueryText": query_str,
                 "IndentedUse": "Storage",
                 "options": {
                     "maxResults": 2,
@@ -118,7 +122,7 @@ def geocode_addresses(locations: list[Location], amazon_api_key: str, amazon_bas
                 raise AmazonAPIKeyError(
                     "Failed geocoding property states due to Amazon error. Your Amazon API Key is either invalid or at its limit."
                 )
-            print("response: ", response.json())
+            # print("response: ", response.json())
             results.append(response.json())
         except Exception as e:
             if response.status_code == 403:
@@ -127,5 +131,5 @@ def geocode_addresses(locations: list[Location], amazon_api_key: str, amazon_bas
                 )
             else:
                 raise e
-    print(f" geocoding results... {results}")
+    # print(f" geocoding results... {results}")
     return [_process_result(result) for result in results]

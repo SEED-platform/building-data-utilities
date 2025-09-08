@@ -24,9 +24,9 @@ Given a list of addresses, this workflow will automatically go through the follo
    AMAZON_APP_ID=XXXXXXXXX
    ```
 
-  Note that if the env keys for AMAZON_API_KEY, AMAZON_BASE_URL, and AMAZON_APP_ID exist in your profile, then it use that over the .env file.
+Note that if the env keys for AMAZON_API_KEY, AMAZON_BASE_URL, and AMAZON_APP_ID exist in your profile, then it use that over the .env file.
 
-  Due to the nature of this application, we are passing IntendedUse=Storage to the Amazon Location Services API. This results in a slightly higher rate per transaction, but allows us to store the results.
+Due to the nature of this application, we are passing IntendedUse=Storage to the Amazon Location Services API. This results in a slightly higher rate per transaction, but allows us to store the results.
 
 5. Create a `locations.json` file in the root containing a list of addresses to process in the format:
 
@@ -62,7 +62,6 @@ Given a list of addresses, this workflow will automatically go through the follo
   - Cache geocoding results (if allowed) to avoid API limit penalties when re-running
   - Allow other geocoders like Google, without persisting the geocoding results
   - Add distance from geocoded result to footprint boundary, `proximity_to_geocoding_coord` (intersections would be 0)
-
 
 ### Disclaimer
 
