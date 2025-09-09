@@ -65,4 +65,4 @@ Due to the nature of this application, we are passing IntendedUse=Storage to the
 
 ### Disclaimer
 
-When using this tool with the Amazon Location Services geocoding API (or any other geocoder) always confirm that the terms of service allow for using and storing geocoding results. For Amazon Location Services, passing the IntendeUse=Storage parameter to each query allows the user to store the geocoding results.
+When using this tool with the Amazon Location Services geocoding API (or any other geocoder) always confirm that the terms of service allow for using and storing geocoding results. For Amazon Location Services, passing the IntendedUse=Storage parameter to each query allows the user to store the geocoding results.
