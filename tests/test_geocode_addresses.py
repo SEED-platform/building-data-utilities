@@ -99,7 +99,6 @@ class TestGeocodeAddresses:
         }
 
         result = _process_result(mock_result)
-        print("RESULTS (low quality test):", result)
         # Should return quality but not accept the location
         assert result["quality"] == "Less Than 0.90 Confidence"
         assert "latitude" not in result
