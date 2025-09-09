@@ -132,5 +132,4 @@ def geocode_addresses(
                 )
             else:
                 raise e
-    # print(f" geocoding results... {results}")
     return [_process_result(result) for result in results]
