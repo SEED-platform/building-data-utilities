@@ -68,7 +68,7 @@ def _process_result(result):
 
 
 def geocode_addresses(
-    locations: list[Location], amazon_api_key: str, amazon_base_api: str, amazon_app_id: str | None = None
+    locations: list[Location], amazon_api_key: str, amazon_base_url: str, amazon_app_id: str | None = None
 ) -> list[dict[str, Any]]:
     results = []
 
@@ -98,7 +98,7 @@ def geocode_addresses(
         clean_address = [loc.strip(", ") for loc in processed_address]  # remove any leading/trailing commas
         query_str = "\n".join(clean_address)  # join into a single string with newlines
 
-        url_str = f"{amazon_base_api}/geocode/?api_key={amazon_api_key}"
+        url_str = f"{amazon_base_url}/geocode/?api_key={amazon_api_key}"
         if amazon_app_id:
             url_str += f"&_app_id={amazon_app_id}"
         response = requests.post(

@@ -153,7 +153,7 @@ class TestGeocodeAddresses:
         locations = [Location(street="123 Main St", city="Central City", state="CO")]
 
         # Geocode
-        results = geocode_addresses(locations, "fake_amazon_api_key", "fake_amazon_base_api")
+        results = geocode_addresses(locations, "fake_amazon_api_key", "fake_amazon_base_url")
 
         # Check results
         assert len(results) == 1
@@ -180,7 +180,7 @@ class TestGeocodeAddresses:
         locations = [Location(street="123 Main St", city="Denver", state="CO")]
 
         with pytest.raises(AmazonAPIKeyError, match="API Key is invalid"):
-            geocode_addresses(locations, "invalid_key", "fake_amazon_base_api")
+            geocode_addresses(locations, "invalid_key", "fake_amazon_base_url")
 
     @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_api_limit_403(self, mock_post):
@@ -194,7 +194,7 @@ class TestGeocodeAddresses:
         locations = [Location(street="123 Main St", city="Denver", state="CO")]
 
         with pytest.raises(AmazonAPIKeyError, match="at its limit"):
-            geocode_addresses(locations, "limited_key", "fake_amazon_base_api")
+            geocode_addresses(locations, "limited_key", "fake_amazon_base_url")
 
     @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_chunking(self, mock_post):
@@ -227,7 +227,7 @@ class TestGeocodeAddresses:
         for i in range(10):
             locations.append(Location(street=f"{i} Test St", city="Denver", state="CO"))
 
-        results = geocode_addresses(locations, "test_key", "test_amazon_base_api")
+        results = geocode_addresses(locations, "test_key", "test_amazon_base_url")
 
         # Should have results for all locations
         assert len(results) == 10
@@ -237,7 +237,7 @@ class TestGeocodeAddresses:
 
     def test_geocode_addresses_empty_list(self):
         """Test geocoding with empty location list"""
-        results = geocode_addresses([], "test_key", "test_amazon_base_api")
+        results = geocode_addresses([], "test_key", "test_amazon_base_url")
         assert results == []
 
     @patch("building_data_utilities.utils.geocode_addresses.requests.post")
@@ -275,7 +275,7 @@ class TestGeocodeAddresses:
             Location(street="123 Main St", city="Central City", state="CO"),
         ]
 
-        results = geocode_addresses(locations, "test_key", "test_amazon_base_api")
+        results = geocode_addresses(locations, "test_key", "test_amazon_base_url")
         assert len(results) == 1
         # First result should have coordinates
         assert "latitude" in results[0]
@@ -300,7 +300,7 @@ class TestGeocodeAddresses:
         locations = [
             Location(street="1600 Amfthtr Pkway", city="Muntin Vew", state="CA"),
         ]
-        results = geocode_addresses(locations, "test_key", "test_amazon_base_api")
+        results = geocode_addresses(locations, "test_key", "test_amazon_base_url")
         assert len(results) == 1
         # Second result should not have lat/lng (poor quality)
         assert "latitude" not in results[0]
@@ -330,7 +330,7 @@ class TestGeocodeAddresses:
         locations = [
             Location(street="123 Main St", city="", state=""),
         ]
-        results = geocode_addresses(locations, "test_key", "test_amazon_base_api")
+        results = geocode_addresses(locations, "test_key", "test_amazon_base_url")
         assert len(results) == 1
         # Third result should be ambiguous
         assert results[0]["quality"] == "Ambiguous"

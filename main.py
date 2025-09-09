@@ -35,7 +35,7 @@ def main():
     if not AMAZON_API_KEY:
         sys.exit("Missing Amazon Location Services API key")
 
-    AMAZON_BASE_API = os.getenv("AMAZON_BASE_API", "https://places.geo.us-east-2.api.aws/v2")
+    AMAZON_BASE_URL = os.getenv("AMAZON_BASE_URL", "https://places.geo.us-east-2.api.aws/v2")
     AMAZON_APP_ID = os.getenv("AMAZON_APP_ID", None)
 
     if not os.path.exists("locations.json"):
@@ -51,7 +51,7 @@ def main():
     for loc in locations:
         loc["street"] = normalize_address(loc["street"])
 
-    data = geocode_addresses(locations, AMAZON_API_KEY, AMAZON_BASE_API, AMAZON_APP_ID)
+    data = geocode_addresses(locations, AMAZON_API_KEY, AMAZON_BASE_URL, AMAZON_APP_ID)
 
     # TODO confirm high quality geocoding results, and that all results have latitude/longitude properties
 
