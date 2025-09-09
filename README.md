@@ -26,6 +26,8 @@ Given a list of addresses, this workflow will automatically go through the follo
 
 Note that if the env keys for AMAZON_API_KEY, AMAZON_BASE_URL, and AMAZON_APP_ID exist in your profile, then it use that over the .env file.
 
+For NREL users using the rate-limited key, use the following as the AMAZON_BASE_URL: https://developer.nrel.gov/api/tada/amazon-location-service/places/v2
+
 Due to the nature of this application, we are passing IntendedUse=Storage to the Amazon Location Services API. This results in a slightly higher rate per transaction, but allows us to store the results.
 
 5. Create a `locations.json` file in the root containing a list of addresses to process in the format:
