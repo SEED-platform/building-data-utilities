@@ -3,12 +3,11 @@
 Tests for geocoding address utilities
 Simple tests for address geocoding functionality
 """
+
 import os
-import pytest
-
-
-
 from unittest.mock import Mock, patch
+
+import pytest
 
 from building_data_utilities.utils.common import Location
 from building_data_utilities.utils.geocode_addresses import AmazonAPIKeyError, _process_result, geocode_addresses
