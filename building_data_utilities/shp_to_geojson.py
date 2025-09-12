@@ -10,7 +10,7 @@ from pathlib import Path
 import geopandas as gpd
 from pyproj import CRS
 
-from building_data_utilities.ubid import add_ubid_to_geodataframe
+from .ubid import add_ubid_to_geodataframe
 
 
 def shp_to_geojson(shapefile: typing.Union[str, Path]):
