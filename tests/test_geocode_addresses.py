@@ -3,6 +3,10 @@
 Tests for geocoding address utilities
 Simple tests for address geocoding functionality
 """
+import os
+import pytest
+
+
 
 from unittest.mock import Mock, patch
 
@@ -333,3 +337,34 @@ class TestGeocodeAddresses:
         assert len(results) == 1
         # Third result should be ambiguous
         assert results[0]["quality"] == "Ambiguous"
+
+
+class TestGeocodeAddressesIntegration:
+    """Integration tests for geocoding addresses - requires real API key and base URL set in env vars"""
+
+    def setup_method(self):
+        self.api_key = os.environ.get("AMAZON_API_KEY")
+        self.base_url = os.environ.get("AMAZON_BASE_URL")
+        self.app_id = os.environ.get("AMAZON_APP_ID")  # optional
+
+    def test_geocode_addresses_real_amazon_api(self):
+        """Integration test: actually calls the Amazon geocoding API (requires valid API key and base URL)"""
+        if not self.api_key or not self.base_url:
+            pytest.skip("AMAZON_API_KEY and AMAZON_BASE_URL environment variables not set")
+
+        # Casa Bonita, Lakewood, Colorado
+        locations = [Location(street="6715 W Colfax Ave", city="Lakewood", state="")]
+        results = geocode_addresses(locations, self.api_key, self.base_url, self.app_id)
+        assert len(results) == 1
+        result = results[0]
+        assert "latitude" in result
+        assert "longitude" in result
+        assert result["quality"] == 1 or result["quality"] > 0.9
+        # Check that the address/city/state in the result match Casa Bonita
+        assert "colfax" in result["address"].lower()
+        assert result.get("city", "").lower() == "lakewood"
+        assert result.get("state", "").upper() == "CO"
+
+        # check the lat long +/- degrees
+        assert 39.73 < result["latitude"] < 39.75
+        assert -105.09 < result["longitude"] < -105.07

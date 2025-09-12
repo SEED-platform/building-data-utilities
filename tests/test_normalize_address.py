@@ -86,7 +86,7 @@ class TestAddressNormalization:
         except Exception as e:
             import pytest
 
-            pytest.fail(f"_normalize_address_number ha sollevato un'eccezione inattesa: {e}")
+            pytest.fail(f"_normalize_address_number: {e}")
 
     def test_normalize_address_full_integration(self):
         """Integration test - full address normalization"""
