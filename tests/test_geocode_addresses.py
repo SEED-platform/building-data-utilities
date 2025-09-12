@@ -344,12 +344,13 @@ class TestGeocodeAddressesIntegration:
     def setup_method(self):
         self.api_key = os.environ.get("AMAZON_API_KEY")
         self.base_url = os.environ.get("AMAZON_BASE_URL")
-        self.app_id = os.environ.get("AMAZON_APP_ID")  # optional
+        self.app_id = os.environ.get("AMAZON_APP_ID")
 
     def test_geocode_addresses_real_amazon_api(self):
         """Integration test: actually calls the Amazon geocoding API (requires valid API key and base URL)"""
-        if not self.api_key or not self.base_url:
-            pytest.skip("AMAZON_API_KEY and AMAZON_BASE_URL environment variables not set")
+        if not self.api_key or not self.base_url or not self.app_id:
+            # fail the test
+            pytest.fail("AMAZON_API_KEY and AMAZON_BASE_URL and AMAZON_APP_ID environment variables not set")
 
         # Casa Bonita, Lakewood, Colorado
         locations = [Location(street="6715 W Colfax Ave", city="Lakewood", state="")]
