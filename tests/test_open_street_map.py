@@ -121,10 +121,7 @@ class TestOpenStreetMapCoverage:
         # Triggers print for invalid coordinates (lines 95-96)
         result = get_node_coordinates([-1])
         captured = capsys.readouterr()
-        assert (
-            "Error: Failed to retrieve coordinates" in captured.out
-            or result is None
-        )
+        assert "Error: Failed to retrieve coordinates" in captured.out or result is None
 
     def test_process_dataframe_for_osm_buildings_copy_source_columns(self):
         # Covers copy_source_columns True and address/geometry/ubid edge cases
@@ -135,9 +132,7 @@ class TestOpenStreetMapCoverage:
                 "extra": ["foo"],
             }
         )
-        results, errors = process_dataframe_for_osm_buildings(
-            gdf, method="geometry_centroid", copy_source_columns=True
-        )
+        results, errors = process_dataframe_for_osm_buildings(gdf, method="geometry_centroid", copy_source_columns=True)
         assert isinstance(results, list)
         assert isinstance(errors, list)
         if results:
