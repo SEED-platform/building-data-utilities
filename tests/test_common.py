@@ -1,7 +1,6 @@
-# !/usr/bin/env python
 """
-Tests for common utilities and types
-Simple tests for shared data structures
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 from building_data_utilities.utils.common import Location

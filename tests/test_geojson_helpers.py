@@ -1,7 +1,6 @@
-# !/usr/bin/env python
 """
-Tests for GeoJSON helper utilities
-Simple tests for GeoJSON data manipulation
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 from building_data_utilities.utils.geojson_helpers import extract_coordinates

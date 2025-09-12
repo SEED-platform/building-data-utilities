@@ -1,3 +1,8 @@
+"""
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
+"""
+
 # class for holding tests with setup and teardown
 
 from building_data_utilities.utils.chunk import chunk
