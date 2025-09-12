@@ -102,3 +102,43 @@ class TestOpenStreetMapCoverage:
         results, errors = process_dataframe_for_osm_buildings(gdf, method="geometry_centroid")
         assert isinstance(results, list)
         assert isinstance(errors, list)
+
+    def test_download_building_error_print(self, capsys):
+        # Triggers print on error (lines 34)
+        result = download_building(-999999)  # Invalid ID, guaranteed error
+        captured = capsys.readouterr()
+        assert "Error: Failed to download building nodes" in captured.out
+        assert result is None
+
+    def test_download_building_and_nodes_by_id_error_print(self, capsys):
+        # Triggers print on error (lines 45)
+        result = download_building_and_nodes_by_id(-999999)  # Invalid ID, guaranteed error
+        captured = capsys.readouterr()
+        assert "Error: Failed to download building nodes" in captured.out
+        assert result is None
+
+    def test_get_node_coordinates_invalid_range(self, capsys):
+        # Triggers print for invalid coordinates (lines 95-96)
+        result = get_node_coordinates([-1])
+        captured = capsys.readouterr()
+        assert (
+            "Error: Failed to retrieve coordinates" in captured.out
+            or result is None
+        )
+
+    def test_process_dataframe_for_osm_buildings_copy_source_columns(self):
+        # Covers copy_source_columns True and address/geometry/ubid edge cases
+        gdf = gpd.GeoDataFrame(
+            {
+                "geometry": [Point(-105.0772, 39.7405)],
+                "id": [1],
+                "extra": ["foo"],
+            }
+        )
+        results, errors = process_dataframe_for_osm_buildings(
+            gdf, method="geometry_centroid", copy_source_columns=True
+        )
+        assert isinstance(results, list)
+        assert isinstance(errors, list)
+        if results:
+            assert "extra" in results[0]

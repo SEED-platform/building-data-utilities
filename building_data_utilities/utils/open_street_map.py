@@ -65,7 +65,9 @@ def download_building(building_id):
         return None
 
     data = response.json()
-
+    if not data.get("elements"):
+        print(f"Error: Failed to download building nodes for building ID {building_id}")
+        return None
     return data["elements"][0]
 
 
@@ -96,7 +98,9 @@ def download_building_and_nodes_by_id(building_id):
         return None
 
     data = response.json()
-
+    if not data.get("elements"):
+        print(f"Error: Failed to download building nodes for building ID {building_id}")
+        return None
     # Extract the nodes from the response
     nodes = []
     for element in data["elements"]:
