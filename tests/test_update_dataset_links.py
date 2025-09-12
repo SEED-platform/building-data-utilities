@@ -1,6 +1,6 @@
 """
 SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
-See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
 import shutil
