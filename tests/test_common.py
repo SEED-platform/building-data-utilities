@@ -3,7 +3,7 @@ SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and othe
 See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
-from building_data_utilities.utils.common import Location
+from building_data_utilities.common import Location
 
 
 class TestCommonTypes:

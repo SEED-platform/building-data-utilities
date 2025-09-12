@@ -8,8 +8,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from building_data_utilities.utils.common import Location
-from building_data_utilities.utils.geocode_addresses import AmazonAPIKeyError, _process_result, geocode_addresses
+from building_data_utilities.common import Location
+from building_data_utilities.geocode_addresses import AmazonAPIKeyError, _process_result, geocode_addresses
 
 
 class TestGeocodeAddresses:
@@ -119,7 +119,7 @@ class TestGeocodeAddresses:
         result = _process_result(mock_result)
         assert result["quality"] == "Less Than 0.90 Confidence"
 
-    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.geocode_addresses.requests.post")
     def test_geocode_addresses_success(self, mock_post):
         """Test successful geocoding of addresses"""
         # Mock successful response
@@ -181,7 +181,7 @@ class TestGeocodeAddresses:
         assert "geocode" in call_args[0][0]
         assert "fake_amazon_api_key" in call_args[0][0]
 
-    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.geocode_addresses.requests.post")
     def test_geocode_addresses_invalid_api_key_401(self, mock_post):
         """Test handling of invalid API key (401 error)"""
         import pytest
@@ -196,7 +196,7 @@ class TestGeocodeAddresses:
         with pytest.raises(AmazonAPIKeyError, match="API Key is invalid"):
             geocode_addresses(locations, "invalid_key", "fake_amazon_base_url")
 
-    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.geocode_addresses.requests.post")
     def test_geocode_addresses_api_limit_403(self, mock_post):
         """Test handling of API limit exceeded (403 error)"""
         import pytest
@@ -210,7 +210,7 @@ class TestGeocodeAddresses:
         with pytest.raises(AmazonAPIKeyError, match="at its limit"):
             geocode_addresses(locations, "limited_key", "fake_amazon_base_url")
 
-    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.geocode_addresses.requests.post")
     def test_geocode_addresses_chunking(self, mock_post):
         """Test that large lists are properly chunked"""
 
@@ -254,7 +254,7 @@ class TestGeocodeAddresses:
         results = geocode_addresses([], "test_key", "test_amazon_base_url")
         assert results == []
 
-    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.geocode_addresses.requests.post")
     def test_geocode_addresses_mixed_quality_results(self, mock_post):
         """Test geocoding with mixed quality results"""
         mock_response = Mock()
@@ -349,7 +349,7 @@ class TestGeocodeAddresses:
         # Third result should be ambiguous
         assert results[0]["quality"] == "Ambiguous"
 
-    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
+    @patch("building_data_utilities.geocode_addresses.requests.post")
     def test_geocode_addresses_exception_handling(self, mock_post):
         """Test geocode_addresses error handling for non-403 exception (line 67)."""
         mock_post.return_value.status_code = 500

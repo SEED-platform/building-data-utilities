@@ -3,7 +3,7 @@ SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and othe
 See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
-from building_data_utilities.utils.normalize_address import (
+from building_data_utilities.normalize_address import (
     _normalize_address_direction,
     _normalize_address_number,
     _normalize_address_post_type,

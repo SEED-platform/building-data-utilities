@@ -5,7 +5,7 @@ See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 
 # class for holding tests with setup and teardown
 
-from building_data_utilities.utils.chunk import chunk
+from building_data_utilities.chunk import chunk
 
 
 class TestChunk:

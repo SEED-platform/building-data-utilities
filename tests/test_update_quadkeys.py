@@ -10,7 +10,7 @@ from unittest.mock import Mock, mock_open, patch
 
 import pandas as pd
 
-from building_data_utilities.utils.update_quadkeys import update_quadkeys
+from building_data_utilities.update_quadkeys import update_quadkeys
 
 
 class TestUpdateQuadkeys:
@@ -41,7 +41,7 @@ class TestUpdateQuadkeys:
         )
         dataset_data.to_csv(self.save_dir / "dataset-links.csv", index=False)
 
-    @patch("building_data_utilities.utils.update_quadkeys.requests")
+    @patch("building_data_utilities.update_quadkeys.requests")
     @patch("pandas.read_csv")
     @patch("builtins.open", new_callable=mock_open)
     def test_update_quadkeys_basic_download(self, mock_file, mock_read_csv, mock_requests):
@@ -76,7 +76,7 @@ class TestUpdateQuadkeys:
         # Verify file was written
         mock_file.assert_called()
 
-    @patch("building_data_utilities.utils.update_quadkeys.requests")
+    @patch("building_data_utilities.update_quadkeys.requests")
     @patch("pandas.read_csv")
     def test_update_quadkeys_skip_existing_file(self, mock_read_csv, mock_requests):
         """Test that existing files with correct size are skipped"""
@@ -100,7 +100,7 @@ class TestUpdateQuadkeys:
         mock_requests.head.assert_called_once()
         mock_requests.get.assert_not_called()
 
-    @patch("building_data_utilities.utils.update_quadkeys.requests")
+    @patch("building_data_utilities.update_quadkeys.requests")
     @patch("pandas.read_csv")
     @patch("builtins.open", new_callable=mock_open)
     def test_update_quadkeys_redownload_different_size(self, mock_file, mock_read_csv, mock_requests):
@@ -142,7 +142,7 @@ class TestUpdateQuadkeys:
         with pytest.raises(ValueError, match="QuadKey not found in dataset: 123"):
             update_quadkeys([123], save_directory=self.save_dir)
 
-    @patch("building_data_utilities.utils.update_quadkeys.requests")
+    @patch("building_data_utilities.update_quadkeys.requests")
     @patch("pandas.read_csv")
     def test_update_quadkeys_multiple_urls_uses_latest(self, mock_read_csv, mock_requests):
         """Test that when multiple URLs exist, the latest is used"""
@@ -180,7 +180,7 @@ class TestUpdateQuadkeys:
         mock_requests.head.assert_not_called()
         mock_requests.get.assert_called_with("https://example.com/new/123.geojsonl.gz")
 
-    @patch("building_data_utilities.utils.update_quadkeys.requests")
+    @patch("building_data_utilities.update_quadkeys.requests")
     @patch("pandas.read_csv")
     @patch("builtins.open", new_callable=mock_open)
     def test_update_quadkeys_multiple_quadkeys(self, mock_file, mock_read_csv, mock_requests):

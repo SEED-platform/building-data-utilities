@@ -9,8 +9,8 @@ from typing import Any
 
 import requests
 
-from building_data_utilities.utils.chunk import chunk
-from building_data_utilities.utils.common import Location
+from building_data_utilities.chunk import chunk
+from building_data_utilities.common import Location
 
 
 class AmazonAPIKeyError(Exception):

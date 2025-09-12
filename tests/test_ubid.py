@@ -6,7 +6,7 @@ See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
 
-from building_data_utilities.utils.ubid import add_ubid_to_geodataframe, bounding_box, centroid, encode_ubid
+from building_data_utilities.ubid import add_ubid_to_geodataframe, bounding_box, centroid, encode_ubid
 
 
 class TestUBIDUtils:

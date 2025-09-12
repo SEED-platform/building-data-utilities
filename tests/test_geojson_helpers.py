@@ -3,7 +3,7 @@ SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and othe
 See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
-from building_data_utilities.utils.geojson_helpers import extract_coordinates
+from building_data_utilities.geojson_helpers import extract_coordinates
 
 
 class TestGeoJSONHelpers:

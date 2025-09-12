@@ -7,7 +7,7 @@ import geopandas as gpd
 import pytest
 from shapely.geometry import Point
 
-from building_data_utilities.utils.open_street_map import (
+from building_data_utilities.open_street_map import (
     download_building,
     download_building_and_nodes_by_id,
     find_nearest_building,
