@@ -1,7 +1,6 @@
-# !/usr/bin/env python
 """
-Tests for address normalization utilities
-Simple integration-style tests that are easy to understand
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 from building_data_utilities.utils.normalize_address import (

@@ -1,7 +1,6 @@
-# !/usr/bin/env python
 """
-Tests for dataset links update utilities
-Simple tests for downloading and updating dataset links
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 import shutil

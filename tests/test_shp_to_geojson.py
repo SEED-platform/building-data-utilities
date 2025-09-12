@@ -1,7 +1,6 @@
-# !/usr/bin/env python
 """
-Tests for shapefile to GeoJSON conversion utility
-Simple integration-style tests using temporary files
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 import json

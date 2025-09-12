@@ -1,7 +1,6 @@
-# !/usr/bin/env python
 """
-Tests for UBID (Unique Building Identifier) utilities
-Simple tests for encoding/decoding and GeoDataFrame operations
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
 """
 
 import geopandas as gpd
