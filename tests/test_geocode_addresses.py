@@ -107,6 +107,19 @@ class TestGeocodeAddresses:
         assert "latitude" not in result
         assert "longitude" not in result
 
+    def test_process_result_no_results(self):
+        """Test _process_result returns correct value when no results are found (line 40)."""
+        mock_result = {"ResultItems": []}
+        result = _process_result(mock_result)
+        assert result["quality"] == "Ambiguous"
+
+    def test_process_result_unexpected_branch(self):
+        """Test _process_result returns 'Less Than 0.90 Confidence' for unexpected branch (line 67)."""
+        # This will hit the final else branch if MatchScores is missing or low
+        mock_result = {"ResultItems": [{"MatchScores": {}, "Position": [0, 0], "Address": {}}]}
+        result = _process_result(mock_result)
+        assert result["quality"] == "Less Than 0.90 Confidence"
+
     @patch("building_data_utilities.utils.geocode_addresses.requests.post")
     def test_geocode_addresses_success(self, mock_post):
         """Test successful geocoding of addresses"""
@@ -285,7 +298,7 @@ class TestGeocodeAddresses:
 
         # 2nd response
         mock_response.json.return_value = {
-            # Poor quality result (matchsore < 0.9)
+            # Poor quality result (matchscore < 0.9)
             "ResultItems": [
                 {
                     "PlaceId": "AQA2",
@@ -336,6 +349,15 @@ class TestGeocodeAddresses:
         assert len(results) == 1
         # Third result should be ambiguous
         assert results[0]["quality"] == "Ambiguous"
+
+    @patch("building_data_utilities.utils.geocode_addresses.requests.post")
+    def test_geocode_addresses_exception_handling(self, mock_post):
+        """Test geocode_addresses error handling for non-403 exception (line 67)."""
+        mock_post.return_value.status_code = 500
+        mock_post.return_value.json.side_effect = Exception("fail json parse")
+        locations = [Location(street="fail", city="fail", state="fail")]
+        with pytest.raises(Exception):  # noqa: PT011
+            geocode_addresses(locations, "bad_key", "bad_url")
 
 
 class TestGeocodeAddressesIntegration:

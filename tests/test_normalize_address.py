@@ -141,3 +141,55 @@ class TestAddressNormalization:
         assert result is not None
         assert "123" in result
         assert "main" in result
+
+    def test_normalize_address_empty_and_bytes(self):
+        # Covers lines 90-91, 131-136, 145
+        assert normalize_address("") is None
+        assert normalize_address(b"123 Main St") == "123 main st"
+
+        class Dummy:
+            def __str__(self):
+                return "456 Oak Ave"
+
+        assert normalize_address(Dummy()) == "456 oak ave"
+
+    def test_normalize_address_usaddress_repeated_label(self, monkeypatch):
+        # Covers line 131 (usaddress.RepeatedLabelError branch)
+        import usaddress
+
+        class DummyRepeatedLabelError(Exception):
+            pass
+
+        monkeypatch.setattr(usaddress, "RepeatedLabelError", DummyRepeatedLabelError)
+
+        def raise_repeated(*a, **k):
+            raise DummyRepeatedLabelError()
+
+        monkeypatch.setattr(usaddress, "tag", raise_repeated)
+        # Should fallback to str(address_val)
+        assert normalize_address("bad address") == "bad address"
+
+    def test_normalize_address_all_fields(self, monkeypatch):
+        # Covers lines 158, 161 (all fields present)
+        addr = {
+            "AddressNumber": "00123",
+            "StreetNamePreDirectional": "north",
+            "StreetName": "Main",
+            "StreetNamePostType": "Avenue",
+            "StreetNamePostDirectional": "west",
+            "SubaddressType": "bldg",
+            "SubaddressIdentifier": "A",
+            "OccupancyType": "ste",
+            "OccupancyIdentifier": "100",
+        }
+        monkeypatch.setattr("usaddress.tag", lambda *_a, **_k: (addr, None))
+        result = normalize_address("123 north main avenue west bldg a ste 100")
+        assert "123" in result
+        assert "n" in result
+        assert "main" in result
+        assert "ave" in result
+        assert "w" in result
+        assert "building" in result
+        assert "a" in result
+        assert "suite" in result
+        assert "100" in result
