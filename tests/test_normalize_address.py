@@ -1,10 +1,9 @@
-# !/usr/bin/env python
 """
-Tests for address normalization utilities
-Simple integration-style tests that are easy to understand
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
-from building_data_utilities.utils.normalize_address import (
+from building_data_utilities.normalize_address import (
     _normalize_address_direction,
     _normalize_address_number,
     _normalize_address_post_type,

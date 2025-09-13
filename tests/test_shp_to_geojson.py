@@ -1,7 +1,6 @@
-# !/usr/bin/env python
 """
-Tests for shapefile to GeoJSON conversion utility
-Simple integration-style tests using temporary files
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
 import json
@@ -12,7 +11,7 @@ import tempfile
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
 
-from building_data_utilities.utils.shp_to_geojson import shp_to_geojson
+from building_data_utilities.shp_to_geojson import shp_to_geojson
 
 
 class TestShpToGeoJSON:

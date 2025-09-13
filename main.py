@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 """
 SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
-See also https://github.com/SEED-platform/cbl-workflow/blob/main/LICENSE.md
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
 import gzip
@@ -18,12 +18,12 @@ import pandas as pd
 from dotenv import load_dotenv
 from shapely.geometry import Point
 
-from building_data_utilities.utils.common import Location
-from building_data_utilities.utils.geocode_addresses import geocode_addresses
-from building_data_utilities.utils.normalize_address import normalize_address
-from building_data_utilities.utils.ubid import bounding_box, centroid, encode_ubid
-from building_data_utilities.utils.update_dataset_links import update_dataset_links
-from building_data_utilities.utils.update_quadkeys import update_quadkeys
+from building_data_utilities.common import Location
+from building_data_utilities.geocode_addresses import geocode_addresses
+from building_data_utilities.normalize_address import normalize_address
+from building_data_utilities.ubid import bounding_box, centroid, encode_ubid
+from building_data_utilities.update_dataset_links import update_dataset_links
+from building_data_utilities.update_quadkeys import update_quadkeys
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)

@@ -1,13 +1,12 @@
-# !/usr/bin/env python
 """
-Tests for UBID (Unique Building Identifier) utilities
-Simple tests for encoding/decoding and GeoDataFrame operations
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
 
-from building_data_utilities.utils.ubid import add_ubid_to_geodataframe, bounding_box, centroid, encode_ubid
+from building_data_utilities.ubid import add_ubid_to_geodataframe, bounding_box, centroid, encode_ubid
 
 
 class TestUBIDUtils:

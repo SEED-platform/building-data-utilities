@@ -1,10 +1,9 @@
-# !/usr/bin/env python
 """
-Tests for common utilities and types
-Simple tests for shared data structures
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
-from building_data_utilities.utils.common import Location
+from building_data_utilities.common import Location
 
 
 class TestCommonTypes:
