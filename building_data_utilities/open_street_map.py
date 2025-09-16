@@ -1,3 +1,8 @@
+"""
+SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
+"""
+
 import requests
 from geopandas.geodataframe import GeoDataFrame
 from geopy.geocoders import Nominatim
@@ -13,7 +18,7 @@ def reverse_geocode(lat, lon):
     is per the license agreement"""
     geolocator = Nominatim(user_agent="CBL")
     location = geolocator.reverse((lat, lon), language="en", exactly_one=True)
-    # print(location)
+
     return location.raw
 
 
@@ -65,7 +70,9 @@ def download_building(building_id):
         return None
 
     data = response.json()
-
+    if not data.get("elements"):
+        print(f"Error: Failed to download building nodes for building ID {building_id}")
+        return None
     return data["elements"][0]
 
 
@@ -96,7 +103,9 @@ def download_building_and_nodes_by_id(building_id):
         return None
 
     data = response.json()
-
+    if not data.get("elements"):
+        print(f"Error: Failed to download building nodes for building ID {building_id}")
+        return None
     # Extract the nodes from the response
     nodes = []
     for element in data["elements"]:
@@ -245,7 +254,7 @@ def process_dataframe_for_osm_buildings(
 
     Args:
         geodataframe (GeoDataFrame): Dataframe to process and add results to.
-        method (str, optional): Which field contains the geo data. Defaults to 'geometry_centoid'.
+        method (str, optional): Which field contains the geo data. Defaults to 'geometry_centroid'.
         copy_source_columns (bool, optional): Copy the source columns to the result. Defaults to False.
 
     Returns:

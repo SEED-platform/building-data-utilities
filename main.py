@@ -1,7 +1,7 @@
 # !/usr/bin/env python
 """
 SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
-See also https://github.com/SEED-platform/seed/blob/main/LICENSE.md
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
 import gzip
@@ -18,12 +18,12 @@ import pandas as pd
 from dotenv import load_dotenv
 from shapely.geometry import Point
 
-from utils.common import Location
-from utils.geocode_addresses import geocode_addresses
-from utils.normalize_address import normalize_address
-from utils.ubid import bounding_box, centroid, encode_ubid
-from utils.update_dataset_links import update_dataset_links
-from utils.update_quadkeys import update_quadkeys
+from building_data_utilities.common import Location
+from building_data_utilities.geocode_addresses import geocode_addresses
+from building_data_utilities.normalize_address import normalize_address
+from building_data_utilities.ubid import bounding_box, centroid, encode_ubid
+from building_data_utilities.update_dataset_links import update_dataset_links
+from building_data_utilities.update_quadkeys import update_quadkeys
 
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -31,9 +31,12 @@ load_dotenv()
 
 
 def main():
-    MAPQUEST_API_KEY = os.getenv("MAPQUEST_API_KEY")
-    if not MAPQUEST_API_KEY:
-        sys.exit("Missing MapQuest API key")
+    AMAZON_API_KEY = os.getenv("AMAZON_API_KEY")
+    if not AMAZON_API_KEY:
+        sys.exit("Missing Amazon Location Services API key")
+
+    AMAZON_BASE_URL = os.getenv("AMAZON_BASE_URL", "https://places.geo.us-east-2.api.aws/v2")
+    AMAZON_APP_ID = os.getenv("AMAZON_APP_ID", None)
 
     if not os.path.exists("locations.json"):
         sys.exit("Missing locations.json file")
@@ -48,7 +51,7 @@ def main():
     for loc in locations:
         loc["street"] = normalize_address(loc["street"])
 
-    data = geocode_addresses(locations, MAPQUEST_API_KEY)
+    data = geocode_addresses(locations, AMAZON_API_KEY, AMAZON_BASE_URL, AMAZON_APP_ID)
 
     # TODO confirm high quality geocoding results, and that all results have latitude/longitude properties
 

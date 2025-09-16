@@ -1,13 +1,12 @@
-# !/usr/bin/env python
 """
 SEED Platform (TM), Copyright (c) Alliance for Sustainable Energy, LLC, and other contributors.
-See also https://github.com/SEED-platform/seed/blob/main/LICENSE.md
+See also https://github.com/SEED-platform/building-data-utilities/blob/main/LICENSE.md
 """
 
 import re
 
-import usaddress
-from streetaddress.streetaddress import StreetAddressFormatter
+import usaddress  # type: ignore[import]
+from streetaddress.streetaddress import StreetAddressFormatter  # type: ignore[import]
 
 
 def _normalize_subaddress_type(subaddress_type):

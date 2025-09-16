@@ -1,10 +1,17 @@
 __pycache__
 .env
 .idea
+.pytest_cache
 .python-version
 .ruff_cache
+.vscode
+.DS_Store
+coverage.xml
+.coverage
+myenv
 
 dist
+node_modules
 
 /data/
 /locations.json
